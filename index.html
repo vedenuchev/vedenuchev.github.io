@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Для тебя</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&family=Manrope:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0a1c; --bg2:#101a3a;
+  --rose:#ff9ec7; --gold:#ffd9a3; --lilac:#b7a4ff; --warm:255,190,140;
+  --ink:#fff4f8; --ink-soft:rgba(255,244,248,.66);
+  --glass:rgba(255,255,255,.07); --line:rgba(255,255,255,.16);
+  --ease:cubic-bezier(.22,.8,.2,1);
+  --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.5rem;--s6:2rem;--s7:3rem;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;overflow:hidden;overscroll-behavior:none}
+body{min-height:100%;margin:0;color:var(--ink);background:var(--bg);font-family:"Manrope",system-ui,sans-serif;overflow:hidden;overscroll-behavior:none;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+img,video,svg{-webkit-user-drag:none;user-drag:none}
+.sky{position:fixed;inset:0;z-index:0;background:radial-gradient(120% 90% at 20% 0%,#2a1246 0,transparent 60%),radial-gradient(100% 80% at 90% 100%,#0f2a5c 0,transparent 60%),linear-gradient(160deg,var(--bg),var(--bg2))}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;animation:drift 24s ease-in-out infinite alternate}
+.orb.a{width:46vmax;height:46vmax;left:-14vmax;top:-12vmax;background:#c2417f}
+.orb.b{width:40vmax;height:40vmax;right:-12vmax;bottom:-10vmax;background:#3a56d8;animation-duration:30s}
+@keyframes drift{to{transform:translate3d(5vmax,4vmax,0) scale(1.12)}}
+main{position:relative;z-index:2;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px 18px}
+.screen{grid-area:1/1;width:100%;display:grid;place-items:center;transition:opacity 1s var(--ease),transform 1s var(--ease),filter 1s var(--ease)}
+.screen[hidden]{display:none}
+.leave{opacity:0;transform:scale(1.06);filter:blur(20px);pointer-events:none}
+
+/* ---------- Gate ---------- */
+.card{width:min(520px,100%);padding:clamp(1.5rem,7vw,2.5rem);display:flex;flex-direction:column;gap:var(--s6);background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:32px;-webkit-backdrop-filter:blur(26px) saturate(140%);backdrop-filter:blur(26px) saturate(140%);box-shadow:0 30px 80px rgba(6,2,20,.55),0 0 90px rgba(255,158,199,.13),inset 0 1px 0 rgba(255,255,255,.22);text-align:center;animation:rise 1.4s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.97);filter:blur(14px)}to{opacity:1;transform:none;filter:blur(0)}}
+.head{display:flex;flex-direction:column;align-items:center;gap:var(--s4)}
+.heart{width:32px;height:32px;color:var(--rose);filter:drop-shadow(0 0 12px var(--rose));animation:beat 3.2s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.16)}24%{transform:scale(1)}36%{transform:scale(1.1)}}
+h1{margin:0;font:italic 400 clamp(28px,6.6vw,42px)/1.16 "Cormorant Garamond",Georgia,serif;background:linear-gradient(100deg,#fff 0,var(--gold) 30%,var(--rose) 55%,#fff 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 9s linear infinite}
+@keyframes shine{to{background-position:-250% 0}}
+form{display:flex;flex-direction:column;gap:var(--s4)}
+.field{position:relative}
+.field::before{content:"";position:absolute;inset:-2px;border-radius:20px;background:linear-gradient(120deg,var(--rose),var(--lilac),var(--gold),var(--rose));background-size:300% 100%;opacity:0;filter:blur(12px);transition:opacity .6s var(--ease);animation:hue 6s linear infinite}
+.field:focus-within::before{opacity:.65}
+@keyframes hue{to{background-position:300% 0}}
+input{position:relative;width:100%;padding:var(--s4) var(--s5);font:500 17px/1.2 "Manrope",sans-serif;color:var(--ink);text-align:center;background:rgba(14,10,28,.62);border:1px solid var(--line);border-radius:18px;outline:none;transition:border-color .4s,background .4s}
+input::placeholder{color:var(--ink-soft)}
+input:focus{border-color:rgba(255,255,255,.5);background:rgba(14,10,28,.78)}
+.sparks{display:flex;gap:var(--s2);justify-content:center;margin-top:var(--s3)}
+.sparks i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .6s var(--ease),box-shadow .6s var(--ease),transform .6s var(--ease)}
+.sparks i.on{background:var(--gold);box-shadow:0 0 14px 3px rgba(255,217,163,.8);transform:scale(1.35)}
+.status{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.status.show{grid-template-rows:1fr}
+.status>div{min-height:0;overflow:hidden}
+.msg{margin:0;padding-top:var(--s3);font-size:14px;line-height:1.4;color:var(--ink-soft)}
+.msg.bad{color:#ffb8d2}
+.shake{animation:shake .6s var(--ease)}
+@keyframes shake{20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+button{-webkit-appearance:none;appearance:none;font:600 15px/1 "Manrope",sans-serif;cursor:pointer;border-radius:999px;color:var(--ink);transition:transform .5s var(--ease),box-shadow .5s var(--ease),background .5s,color .4s}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.go{width:100%;padding:var(--s4) var(--s5);border:0;color:#2a0f26;background:linear-gradient(120deg,var(--gold),var(--rose));box-shadow:0 8px 30px rgba(255,158,199,.4)}
+.go:hover{transform:translateY(-2px);box-shadow:0 12px 44px rgba(255,158,199,.62)}
+.ghost{padding:var(--s4) var(--s5);background:var(--glass);border:1px solid var(--line);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.hintwrap{position:relative;display:flex;justify-content:center;margin-bottom:calc(var(--s2)*-1)}
+.hintlink{display:inline-flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s3);border:0;background:none;border-radius:var(--s2);font-weight:500;font-size:13.5px;color:var(--ink-soft)}
+.hintlink:hover{color:var(--ink);text-shadow:0 0 14px rgba(255,217,163,.7)}
+.hintlink .i{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1px solid currentColor;font:italic 600 12px/1 "Cormorant Garamond",Georgia,serif}
+.pop{position:absolute;left:50%;bottom:calc(100% + var(--s2));z-index:5;width:200px;padding:6px;border-radius:18px;background:rgba(26,17,52,.92);border:1px solid var(--line);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:0 24px 60px rgba(6,2,20,.6),0 0 60px rgba(183,164,255,.28);opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,var(--s4)) scale(.9);transition:opacity .7s var(--ease),transform .9s var(--ease),visibility 0s linear .9s}
+.pop.open{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0) scale(1);transition:opacity .7s var(--ease),transform .9s var(--ease),visibility 0s}
+.pop::before,.pop::after{content:"";position:absolute;left:50%;bottom:0;width:0;height:0;transform:translate(-50%,100%);border-left:8px solid transparent;border-right:8px solid transparent}
+.pop::before{border-top:9px solid var(--line)}
+.pop::after{bottom:-1.6px;border-left-width:7px;border-right-width:7px;border-top:7px solid rgba(26,17,52,.92)}
+.pop-inner{border-radius:12px;overflow:hidden;filter:blur(16px);transition:filter 1.1s var(--ease) .05s}
+.pop.open .pop-inner{filter:blur(0)}
+.pop-inner img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;pointer-events:none}
+.pop-x{position:absolute;top:var(--s2);right:var(--s2);z-index:1;width:24px;height:24px;padding:0;display:grid;place-items:center;border:1px solid rgba(255,255,255,.3);background:rgba(14,10,28,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pop-x svg{width:10px;height:10px}
+
+/* ---------- Открытка: полный экран ---------- */
+#card{position:fixed;inset:0;z-index:3;display:block;width:auto;background:#000;overflow:hidden;touch-action:none;
+  opacity:0;transform:scale(.97);filter:blur(24px)}
+#card[hidden]{display:none}
+#card.enter{opacity:1;transform:none;filter:none}
+/* stage — холст с пропорциями реального кадра (PNG), растянутый «на весь экран» (cover).
+   Все координаты в % считаются от него. */
+#stage{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;background:#000}
+#stage .still,#stage .vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;background:transparent}
+#stage .still{opacity:0;z-index:1;transition:opacity 0s}
+#stage .still.under{opacity:1;z-index:1}
+#stage .still.on{opacity:1;z-index:2}
+#stage .vid{opacity:0;z-index:3}
+#stage .vid.on{opacity:1}
+#stage.lift .still.on{z-index:4}   /* в конце ролика конечный кадр ложится поверх него */
+
+/* Слои подсветки (alpha + mask) */
+#hot{position:absolute;inset:0;z-index:5;pointer-events:auto}
+.tune #hot{pointer-events:none}
+.hotg{position:absolute;inset:0;pointer-events:none;animation:hotIn .7s var(--ease) both}
+@keyframes hotIn{from{opacity:0}to{opacity:1}}
+.hotg img{position:absolute;display:block;object-fit:fill;pointer-events:none}
+.hotg img.alpha{transition:filter .5s var(--ease)}
+.hotg.pulse img.alpha{animation:glow 2.6s ease-in-out infinite}
+.hotg.hv img.alpha{animation:none;filter:drop-shadow(0 0 8px rgba(var(--warm),.95)) drop-shadow(0 0 26px rgba(var(--warm),.65))}
+/* strong:true — яркое свечение для маленьких объектов (обычное на них теряется) */
+.hotg.strong.pulse img.alpha{animation:glowS 1.9s ease-in-out infinite}
+.hotg.strong.hv img.alpha{animation:none;filter:drop-shadow(0 0 3px rgba(255,255,255,.95)) drop-shadow(0 0 12px rgba(var(--warm),1)) drop-shadow(0 0 30px rgba(var(--warm),1)) drop-shadow(0 0 60px rgba(var(--warm),.9)) brightness(1.4)}
+@keyframes glowS{
+  0%,100%{filter:drop-shadow(0 0 4px rgba(var(--warm),.85)) drop-shadow(0 0 14px rgba(var(--warm),.65)) drop-shadow(0 0 32px rgba(var(--warm),.4)) brightness(1.05)}
+  50%{filter:drop-shadow(0 0 3px rgba(255,255,255,.95)) drop-shadow(0 0 12px rgba(var(--warm),1)) drop-shadow(0 0 30px rgba(var(--warm),1)) drop-shadow(0 0 60px rgba(var(--warm),.9)) brightness(1.4)}}
+@keyframes glow{
+  0%,100%{filter:drop-shadow(0 0 4px rgba(var(--warm),.35)) drop-shadow(0 0 12px rgba(var(--warm),.2))}
+  50%{filter:drop-shadow(0 0 9px rgba(var(--warm),.95)) drop-shadow(0 0 30px rgba(var(--warm),.6))}}
+/* зона клика (rect) видна только в режиме подгонки */
+.rv{position:absolute;display:none;pointer-events:none;border:1.5px dashed #6be3ff;background:rgba(107,227,255,.08)}
+.tune .rv{display:block}
+/* запасной вариант без alpha: прямоугольная обводка */
+.boxfx{position:absolute;opacity:0;border-radius:14px;border:1px solid rgba(var(--warm),.55);background:radial-gradient(closest-side,rgba(var(--warm),.26),rgba(var(--warm),.05) 75%,transparent);box-shadow:0 0 26px rgba(var(--warm),.5),inset 0 0 22px rgba(var(--warm),.28);transition:opacity .6s var(--ease)}
+.hotg.pulse .boxfx{animation:boxpulse 2.6s ease-in-out infinite}
+.hotg.hv .boxfx{animation:none;opacity:1}
+@keyframes boxpulse{0%,100%{opacity:.25}50%{opacity:1}}
+
+/* ---------- Стрелки «гелевой ручкой» ---------- */
+.pen{position:fixed;top:50%;z-index:6;width:118px;height:88px;margin-top:-44px;padding:12px;border:0;border-radius:0;background:none;color:#ffe9f2;cursor:pointer;opacity:.8;
+  transition:opacity .5s var(--ease),filter .5s var(--ease)}
+.pen.next{right:max(8px,env(safe-area-inset-right))}
+.pen.prev{left:max(8px,env(safe-area-inset-left))}
+.pen svg{display:block;width:100%;height:100%;overflow:visible;filter:url(#penwobble)}
+.pen.prev svg{scale:-1 1}
+.pen path{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1}
+.pen .shaft2{stroke-width:1.5;stroke-opacity:.55}
+.pen.draw path{animation:ink .8s cubic-bezier(.45,.1,.3,1) both}
+.pen.draw .shaft2{animation-delay:.12s}
+.pen.draw .head{animation-delay:.5s;animation-duration:.5s}
+@keyframes ink{0%{stroke-dashoffset:1;opacity:0}6%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+.pen.ready{opacity:1;filter:drop-shadow(0 0 8px rgba(var(--warm),.8)) drop-shadow(0 0 22px rgba(255,158,199,.45))}
+.pen.ready.next svg{animation:wagN 2.8s ease-in-out infinite}
+.pen.ready.prev svg{animation:wagP 2.8s ease-in-out infinite}
+@keyframes wagN{50%{translate:7px 0}}
+@keyframes wagP{50%{translate:-7px 0}}
+.pen:hover{opacity:1}
+.pen.locked,.pen.locked:hover{opacity:.3;cursor:default}
+.pen[hidden]{display:none}
+.ret{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:6;font-size:13px;padding:10px 18px}
+.ret[hidden]{display:none}
+.ret:hover{transform:translateX(-50%) translateY(-2px)}
+
+/* ---------- Инструмент подгонки (#tune или клавиша T) ---------- */
+.tune #hot .hotg img{opacity:.65;filter:none!important;animation:none!important}
+.tune #hot .boxfx{opacity:.8;animation:none}
+#tlayer{position:absolute;inset:0;z-index:8;pointer-events:none}
+#tlayer.draw{pointer-events:auto;cursor:crosshair}
+#tbox{position:absolute;display:none;border:1.5px dashed var(--gold);box-shadow:0 0 0 1px rgba(0,0,0,.55);pointer-events:auto;cursor:move;touch-action:none}
+.tune #tbox.show{display:block}
+#tbox i{position:absolute;width:13px;height:13px;background:var(--gold);border:1px solid #000;border-radius:3px}
+#tbox i[data-h=nw]{left:-7px;top:-7px;cursor:nwse-resize}
+#tbox i[data-h=ne]{right:-7px;top:-7px;cursor:nesw-resize}
+#tbox i[data-h=sw]{left:-7px;bottom:-7px;cursor:nesw-resize}
+#tbox i[data-h=se]{right:-7px;bottom:-7px;cursor:nwse-resize}
+.sel{position:absolute;pointer-events:none;border:1px dashed var(--gold);background:rgba(255,217,163,.14)}
+.tp{position:fixed;left:12px;bottom:12px;z-index:20;width:308px;max-height:calc(100dvh - 24px);overflow:auto;padding:12px;border-radius:16px;background:rgba(14,10,28,.86);border:1px solid var(--line);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);font-size:12px;line-height:1.35;color:var(--ink);touch-action:auto}
+.tp[hidden]{display:none}
+.tp-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tp-h b{flex:1;font-weight:600}
+.tp button{padding:6px 10px;font-size:11.5px;border-radius:9px;background:var(--glass);border:1px solid var(--line)}
+.tp button:hover{background:rgba(255,255,255,.16)}
+.tp label{display:flex;align-items:center;gap:6px;margin:6px 0}
+.tp label>span{min-width:74px;color:var(--ink-soft)}
+.tp select,.tp input[type=number]{width:100%;padding:5px 6px;font:500 12px "Manrope",sans-serif;color:var(--ink);background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:8px;text-align:left}
+.tp select option{color:#000}
+.tp .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0}
+.tp .grid label{display:block;margin:0}
+.tp .grid label>span{display:block;min-width:0;font-size:10.5px;margin-bottom:2px}
+.tp input[type=range]{padding:0;border:0;background:none;accent-color:var(--gold)}
+.tp input[type=checkbox]{width:auto}
+.tp .row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tp textarea{width:100%;height:120px;padding:6px;font:11px/1.35 ui-monospace,Menlo,monospace;color:var(--ink);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:8px;resize:vertical}
+.tp textarea#tIn{height:64px;margin-top:6px}
+.tp .hint{margin:6px 0 0;color:var(--ink-soft);font-size:11px}
+.tp .bad{color:#ffb8d2}
+
+/* ---------- Стартовый экран: чёрный, звёзды, надпись «гелевой ручкой» ---------- */
+#intro{position:fixed;inset:0;z-index:60;background:#000;display:grid;place-items:center;transition:opacity 1.4s var(--ease)}
+#intro.out{opacity:0;pointer-events:none}
+#intro[hidden]{display:none}
+.stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.stars i{position:absolute;border-radius:50%;background:currentColor;box-shadow:0 0 var(--g) currentColor;filter:blur(var(--b));opacity:calc(var(--p)*.5);animation:tw var(--d) ease-in-out var(--dl) infinite}
+@keyframes tw{0%,100%{opacity:.05}50%{opacity:var(--p)}}
+.ic{position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(20px,6vh,40px);padding:24px;animation:icIn 1.8s var(--ease) both .3s}
+@keyframes icIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.pt{display:block;width:min(80vw,520px);height:auto;overflow:visible;color:#ffe9f2;filter:drop-shadow(0 0 5px rgba(var(--warm),.3)) drop-shadow(0 0 16px rgba(255,158,199,.18))}
+.pt text{font:600 66px/1 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;fill:currentColor;stroke:currentColor;stroke-width:1.1;stroke-linejoin:round}
+.pt .ul{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-opacity:.75}
+.pbtn{width:204px;height:78px;padding:0;border:0;border-radius:0;background:none;color:#ffe9f2;cursor:pointer;opacity:.85;filter:drop-shadow(0 0 5px rgba(var(--warm),.3)) drop-shadow(0 0 16px rgba(255,158,199,.18));transition:opacity .5s var(--ease),transform .5s var(--ease),filter .5s var(--ease)}
+.pbtn:hover,.pbtn:focus-visible{opacity:1;transform:translateY(-2px);filter:drop-shadow(0 0 7px rgba(var(--warm),.6)) drop-shadow(0 0 22px rgba(255,158,199,.35));outline:none}
+.pbtn svg{display:block;width:100%;height:100%;overflow:visible}
+.pbtn path{fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.pbtn .f2{stroke-width:1.6;stroke-opacity:.55}
+.pbtn text{font:600 36px/1 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;fill:currentColor;stroke:currentColor;stroke-width:.9}
+
+/* ---------- Индикатор загрузки (экран пароля) ---------- */
+.ld{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.04em;color:var(--ink-soft);opacity:.5;white-space:nowrap;pointer-events:none;transition:opacity .9s var(--ease)}
+.ld .bar{width:124px;height:2px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden}
+.ld .bar i{display:block;height:100%;width:0;background:rgba(255,224,200,.72);transition:width .4s linear}
+.ld.wait{opacity:.95;font-size:13px}
+.ld.done{opacity:0}
+.ld[hidden]{display:none}
+
+/* ---------- Громкость музыки: тихий значок в углу, ползунок выезжает при наведении ---------- */
+.vol{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;min-height:34px;padding:0 4px;border-radius:999px;color:var(--ink-soft);opacity:.38;transition:opacity .6s var(--ease),background .6s var(--ease)}
+.vol:hover,.vol:focus-within{opacity:.9;background:rgba(14,10,28,.4)}
+.vol[hidden]{display:none}
+.vbtn{width:30px;height:30px;padding:0;display:grid;place-items:center;border:0;border-radius:50%;background:none;color:inherit;flex:none}
+.vbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.vol.muted .w{display:none}
+.vol:not(.muted) .x{display:none}
+.vpanel{width:0;overflow:hidden;display:flex;flex-direction:column;transition:width .5s var(--ease)}
+.vol:hover .vpanel,.vol:focus-within .vpanel{width:100px}
+.vol input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:88px;height:18px;margin:0 6px;padding:0;background:none;border:0;border-radius:0;--p:60%;cursor:pointer;outline:none}
+.vol input[type=range]::-webkit-slider-runnable-track{height:2px;border-radius:2px;background:linear-gradient(to right,rgba(255,232,214,.7) var(--p),rgba(255,255,255,.2) var(--p))}
+.vol input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;margin-top:-4px;border-radius:50%;background:#ffe8d6;border:0;box-shadow:none}
+.vol input[type=range]::-moz-range-track{height:2px;border-radius:2px;background:rgba(255,255,255,.2)}
+.vol input[type=range]::-moz-range-progress{height:2px;border-radius:2px;background:rgba(255,232,214,.7)}
+.vol input[type=range]::-moz-range-thumb{width:10px;height:10px;border:0;border-radius:50%;background:#ffe8d6}
+
+/* ---------- Страница в хорошем качестве ---------- */
+/* кнопка HD: правый верхний угол (там же потом появляется крестик), рисуется «гелевой ручкой» как стрелки, заметная, но негромкая */
+.tbtn{position:fixed;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:7;width:98px;height:56px;padding:0;border:0;border-radius:0;background:none;color:#ffe9f2;cursor:pointer;opacity:.82;filter:drop-shadow(0 0 5px rgba(var(--warm),.28));transition:opacity .5s var(--ease),filter .5s var(--ease),transform .5s var(--ease)}
+.tbtn:hover,.tbtn:focus-visible{opacity:1;transform:translateY(-1px);filter:drop-shadow(0 0 7px rgba(var(--warm),.55)) drop-shadow(0 0 18px rgba(255,158,199,.3));outline:none}
+.tbtn[hidden]{display:none}
+.tbtn svg{display:block;width:100%;height:100%;overflow:visible;filter:url(#penwobble)}
+.tbtn path{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1}
+.tbtn .f2{stroke-width:1.3;stroke-opacity:.5}
+.tbtn .ic{stroke-width:2.2}
+.tbtn text{font:600 30px/1 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;fill:currentColor;stroke:currentColor;stroke-width:.7}
+.tbtn.draw path{animation:ink .9s cubic-bezier(.45,.1,.3,1) both}
+.tbtn.draw .f2{animation-delay:.15s}
+.tbtn.draw .ic{animation-delay:.4s;animation-duration:.6s}
+.tbtn.draw text{animation:hdin .8s var(--ease) .7s both}
+@keyframes hdin{from{opacity:0}to{opacity:1}}
+#photo{position:fixed;inset:0;z-index:50;background:#000;opacity:0;transition:opacity .35s var(--ease)}
+#photo.in{opacity:1}
+#photo[hidden]{display:none}
+#photo .lit{position:absolute;inset:0;opacity:0}
+.hdbox{position:absolute;left:50%;top:50%;width:100vmin;height:100vmin;width:min(100vw,100dvh);height:min(100vw,100dvh);transform:translate(-50%,-50%);isolation:isolate;background:#000}
+.hdbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none}
+/* пыль: белые частицы в режиме overlay — видны только над непустыми пикселями, над тёмными еле заметны, над чёрным их нет */
+.hdbox canvas{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:overlay;pointer-events:none}
+.hdx{position:fixed;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:2;width:66px;height:66px;padding:10px;border:0;border-radius:0;background:none;color:#ffe9f2;cursor:pointer;opacity:.75;filter:url(#penwobble) drop-shadow(0 0 5px rgba(var(--warm),.35));transition:opacity .4s var(--ease)}
+.hdx:hover,.hdx:focus-visible{opacity:1;outline:none}
+.hdx svg{display:block;width:100%;height:100%;overflow:visible}
+.hdx path{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-dasharray:1 1}
+.hdx .s2{stroke-width:1.5;stroke-opacity:.55}
+.hdx.draw path{animation:ink .7s cubic-bezier(.45,.1,.3,1) both}
+.hdx.draw path:nth-child(2){animation-delay:.12s}
+.hdx.draw path:nth-child(3){animation-delay:.24s}
+.tunemode .vol,.tunemode .tbtn{display:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div></div>
+
+<!-- лёгкая «дрожь руки» для стрелок -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="penwobble" x="-15%" y="-25%" width="130%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- «кадровая дрожь» стартового экрана: 8 фильтров с разным рисунком шума, скрипт меняет их 4 раза в секунду -->
+    <filter id="boil0" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil1" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="17" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil2" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil3" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil4" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="58" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil5" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil6" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="boil7" x="-8%" y="-30%" width="116%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="104" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </defs>
+</svg>
+
+<section id="intro" aria-label="Начало">
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <div class="ic">
+    <svg class="pt" viewBox="0 0 520 120" role="img" aria-label="Жду готовность">
+      <g data-boil filter="url(#boil0)">
+        <text x="260" y="74" text-anchor="middle">Жду готовность</text>
+        <path class="ul" d="M92 98 C 160 91 236 104 306 95 S 402 93 430 99"/>
+      </g>
+    </svg>
+    <button type="button" class="pbtn" id="startBtn" aria-label="Начать">
+      <svg viewBox="0 0 204 78" aria-hidden="true">
+        <g data-boil filter="url(#boil0)">
+          <path d="M22 13 C 62 8 142 10 184 13 C 197 14 200 24 199 39 C 198 55 194 62 182 64 C 140 68 66 68 24 65 C 10 64 6 55 7 39 C 8 24 10 15 22 13 Z"/>
+          <path class="f2" d="M18 8 C 70 4 140 6 186 8"/>
+          <text x="102" y="51" text-anchor="middle">Начать</text>
+        </g>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<main>
+  <section id="gate" class="screen" aria-labelledby="q" hidden>
+    <div class="card" id="cardGate">
+      <div class="head">
+        <svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <h1 id="q">Кем мы захотели стать, когда только начали общаться?</h1>
+      </div>
+      <form id="form" autocomplete="off" novalidate>
+        <div class="answer">
+          <div class="field"><input id="answer" type="text" placeholder="Твой ответ" aria-label="Ответ" autocapitalize="off" spellcheck="false"></div>
+          <div class="sparks" id="sparks" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="status" id="status"><div><p class="msg" id="msg" role="status" aria-live="polite"></p></div></div>
+        </div>
+        <button type="submit" class="go">Открыть</button>
+        <div class="hintwrap" id="hintWrap">
+          <button type="button" class="hintlink" id="hintBtn" aria-expanded="false" aria-controls="pop"><span class="i" id="hintI" aria-hidden="true">i</span><span>Подсказка</span></button>
+          <div class="pop" id="pop" role="dialog" aria-label="Подсказка">
+            <button type="button" class="ghost pop-x" id="popX" aria-label="Закрыть подсказку"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+            <div class="pop-inner"><img src="assets/image/hint.jpg" alt="Подсказка" draggable="false"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="card" class="screen" hidden aria-label="Открытка">
+    <div id="stage">
+      <div id="hot"></div>
+      <div id="tlayer"><div id="tbox"><i data-h="nw"></i><i data-h="ne"></i><i data-h="sw"></i><i data-h="se"></i></div></div>
+    </div>
+
+    <button type="button" class="pen prev" id="navPrev" tabindex="-1" aria-label="Назад" hidden>
+      <svg viewBox="0 0 100 64" aria-hidden="true">
+        <path class="shaft" pathLength="1" d="M9 36 C 24 31 40 38 58 32 S 80 31 90 33"/>
+        <path class="shaft2" pathLength="1" d="M13 41 C 30 37 47 42 66 37"/>
+        <path class="head" pathLength="1" d="M72 14 C 78 21 85 27 91 33 C 85 39 78 46 70 54"/>
+      </svg>
+    </button>
+    <button type="button" class="pen next" id="navNext" tabindex="-1" aria-label="Дальше" hidden>
+      <svg viewBox="0 0 100 64" aria-hidden="true">
+        <path class="shaft" pathLength="1" d="M9 36 C 24 31 40 38 58 32 S 80 31 90 33"/>
+        <path class="shaft2" pathLength="1" d="M13 41 C 30 37 47 42 66 37"/>
+        <path class="head" pathLength="1" d="M72 14 C 78 21 85 27 91 33 C 85 39 78 46 70 54"/>
+      </svg>
+    </button>
+    <button type="button" class="ghost ret" id="returnBtn" tabindex="-1" hidden>‹ Вернуться</button>
+    <button type="button" class="tbtn" id="photoBtn" tabindex="-1" hidden title="Посмотреть страницу в хорошем качестве" aria-label="Посмотреть страницу в хорошем качестве">
+      <svg viewBox="0 0 98 56" aria-hidden="true">
+        <path pathLength="1" d="M14 8 C 34 5 68 6 86 8 C 93 9 94 14 94 28 C 94 42 92 47 85 48 C 66 51 32 51 13 49 C 6 48 4 42 4 28 C 4 14 6 9 14 8 Z"/>
+        <path class="f2" pathLength="1" d="M12 4 C 40 2 70 3 88 5"/>
+        <path class="ic" pathLength="1" d="M14 25 V19 H20 M32 19 H38 V25 M14 31 V37 H20 M32 37 H38 V31"/>
+        <text x="66" y="38" text-anchor="middle">HD</text>
+      </svg>
+    </button>
+
+    <div class="tp" id="tp" hidden>
+      <div class="tp-h"><b>Подгонка слоёв</b><button type="button" id="tpMin" tabindex="-1">—</button><button type="button" id="tpX" tabindex="-1">✕</button></div>
+      <div id="tpBody">
+        <label><span>Сцена</span><select id="tSceneSel"></select></label>
+        <label><span>Слой</span><select id="tLayerSel"></select></label>
+        <div class="grid">
+          <label><span>X, %</span><input type="number" id="tX" step="0.05"></label>
+          <label><span>Y, %</span><input type="number" id="tY" step="0.05"></label>
+          <label><span>W, %</span><input type="number" id="tW" step="0.05"></label>
+          <label><span>H, %</span><input type="number" id="tH" step="0.05"></label>
+        </div>
+        <label><input type="checkbox" id="tLock" checked><span style="min-width:0">держать пропорции файла</span></label>
+        <label><span>Прозрачность</span><input type="range" id="tOp" min="10" max="100" value="65"></label>
+        <div class="row">
+          <button type="button" id="tReset" tabindex="-1">Сброс</button>
+          <button type="button" id="tRect" tabindex="-1">▭ Зона клика</button>
+          <button type="button" id="tWhole" tabindex="-1">Кадр целиком (V)</button>
+          <button type="button" id="tCopyScene" tabindex="-1">Копировать сцену</button>
+          <button type="button" id="tCopyAll" tabindex="-1">Копировать всё</button>
+          <button type="button" id="tWipe" tabindex="-1">Сбросить сохранённое</button>
+        </div>
+        <p class="hint" id="tInfo"></p>
+        <textarea id="tOut" readonly spellcheck="false"></textarea>
+        <textarea id="tIn" spellcheck="false" placeholder="Сюда можно вставить данные («Копировать сцену» / «Копировать всё») — применятся сами"></textarea>
+        <div class="row">
+          <button type="button" id="tPaste" tabindex="-1">Вставить из буфера</button>
+          <button type="button" id="tApply" tabindex="-1">Применить</button>
+        </div>
+        <p class="hint" id="tMsg"></p>
+        <p class="hint" id="tMiss"></p>
+        <p class="hint">Тяни слой мышью, углы — масштаб. Стрелки — сдвиг 0.05% (Shift ×10). «+» / «−» — масштаб. L — следующий слой, R — сброс, V — кадр целиком, PgUp/PgDn — листать сцены, T — закрыть. «▭ Зона клика» — обведи мышью область, где объект кликабелен (голубая рамка).</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="photo" hidden>
+  <div class="lit" id="lit">
+    <div class="hdbox" id="hdbox"><img id="photoImg" alt="" draggable="false"><canvas id="dust" aria-hidden="true"></canvas></div>
+    <button type="button" class="hdx" id="photoBack" aria-label="Закрыть">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path class="s1" pathLength="1" d="M15 15 C 25 24 39 38 50 50"/>
+        <path class="s1" pathLength="1" d="M50 14 C 40 26 26 39 13 51"/>
+        <path class="s2" pathLength="1" d="M19 12 C 29 22 41 33 53 45"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="ld" id="ld" hidden><span id="ldT"></span><div class="bar"><i id="ldB"></i></div></div>
+
+<div class="vol" id="vol" hidden>
+  <button type="button" class="vbtn" id="volBtn" aria-label="Выключить или включить звук">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/><path class="w" d="M15.4 9.2a4.1 4.1 0 0 1 0 5.6M18 6.8a7.5 7.5 0 0 1 0 10.4"/><path class="x" d="M15.5 9.5l5 5M20.5 9.5l-5 5"/></svg>
+  </button>
+  <div class="vpanel"><input type="range" id="volRange" min="0" max="100" value="60" aria-label="Громкость музыки" title="Музыка"><input type="range" id="volSfx" min="0" max="100" value="70" aria-label="Громкость звуков" title="Звуки"></div>
+</div>
+
+
+<script>
+/* ============================================================
+   DECK — карта сцен. Пути относительные: assets/video и assets/image.
+
+   Сцена:
+     still     — кадр (PNG)
+     enter     — ролик, который играет при входе в сцену
+     prev/next — соседние сцены;  prevVideo — ролик при возврате назад
+     interactive:{enter,still,exit} — необязательный интерактив (ролик → кадр → реверс).
+                Если advance:true — на кадре интерактива нет кнопки «Вернуться», вместо неё
+                светится стрелка «вперёд» (ведёт в следующую сцену)
+     gateNext:false — стрелка «дальше» светится сразу
+     hot:[…]   — подсвечиваемые объекты на кадре:
+        alpha   PNG-вырез объекта (получает тёплое свечение по силуэту)
+        mask    PNG-вырез объекта, который должен лежать ПОВЕРХ свечения
+                (там, где свечение заходит на другой предмет)
+        fit     [x,y,w,h] в % от кадра — куда положить alpha. Если не указан, файл ложится
+                на весь кадр с сохранением своих пропорций (не растягивается)
+        maskFit то же для mask (если не указан — как у alpha)
+        rect    зона клика [x,y,w,h] в % (если задана, клик работает только внутри неё;
+                без неё — по непрозрачным пикселям выреза, а при открытии как файл
+                с диска браузер не даёт читать пиксели — тогда по рамке выреза).
+                Также запасная рамка, если alpha не загрузился
+        action  "interactive" | "next" | "prev" | id сцены | null (просто свечение)
+        hd      кадр «в хорошем качестве» (JPG, квадрат 1280×1280): кнопка просмотра появляется только у сцен с hd, не на pageX-1
+        strong  true — яркое свечение (для маленьких объектов, как кнопка page2)
+        pulse   true/false — пульсировать ли (по умолчанию: интерактив — пока не открыт, остальное — да)
+
+   fit/maskFit подбираются инструментом подгонки: открой index.html#tune
+   (или нажми T), подгони слои и нажми «Копировать всё».
+   ============================================================ */
+const A="assets/image/", V="assets/video/";
+const DECK = {
+  start:"main",
+  scenes:{
+    main:{ still:A+"main.png",
+      interactive:{ enter:V+"main1.mp4", still:A+"main1.png", exit:V+"main1-reverse.mp4" },
+      hot:[
+        { alpha:A+"main-main1-alpha.png", fit:[0.053,64.412,40.103,35.516], rect:[0,66.481,36.979,33.426], action:"interactive" },
+        { alpha:A+"main-page1-alpha.png", fit:[48.168,32.603,27.344,39.355], rect:[50.488,35.691,20.244,35.556], action:"next" }
+      ],
+      gateNext:false, next:"page1" },
+    page1:{ enter:V+"page1.mp4", still:A+"page1.png", hd:A+"page1-hd.jpg",
+      hot:[ { alpha:A+"main-page1-alpha.png", fit:[29.532,17.427,44.843,64.542], rect:[33.333,22.407,33.281,58.333], action:"next" } ],
+      prev:"main", next:"page2" },
+    page2:{ enter:V+"page2.mp4", still:A+"page2.png", hd:A+"page2-hd.jpg",
+      interactive:{ enter:V+"page2-1.mp4", still:A+"page2-1.png", advance:true },
+      hot:[ { alpha:A+"page2-alpha.png", fit:[49.219,62.876,3.906,7.594],
+              mask:A+"page2-alpha-mask.png", maskFit:[45.008,57.69,11.346,9.902],
+              rect:[49.219,62.593,3.802,7.778], action:"interactive", strong:true } ],
+      prev:"page1", next:"page3" },
+    page3:{ enter:V+"page3.mp4", still:A+"page3.png", hd:A+"page3-hd.jpg",
+      interactive:{ enter:V+"page3-1.mp4", still:A+"page3-1.png", advance:true },
+      hot:[ { alpha:A+"page3-alpha.png", fit:[38.75,36.265,27.552,32.414], rect:[39.375,36.481,26.458,31.759], action:"interactive" } ],
+      prev:"page2", next:"page4" },
+    page4:{ enter:V+"page4.mp4", still:A+"page4.png", hd:A+"page4-hd.jpg",
+      hot:[ { alpha:A+"page4-page5-alpha.png", fit:[65.365,15.089,34.634,66.646], rect:[65.313,22.407,32.552,57.315], action:"next" } ],
+      prev:"page3", next:"page5" },
+    page5:{ enter:V+"page5.mp4", still:A+"page5.png", hd:A+"page5-hd.jpg",
+      interactive:{ enter:V+"page5-1.mp4", still:A+"page5-1.png", advance:true },
+      hot:[ { alpha:A+"page5-alpha.png", fit:[38.386,39.87,27.916,13.107], rect:[38.229,39.074,27.917,13.704], action:"interactive" } ],
+      prev:"page4", next:"page6" },
+    page6:{ enter:V+"page6.mp4", still:A+"page6.png", hd:A+"page6-hd.jpg",
+      hot:[ { alpha:A+"page6-page7-alpha.png", fit:[65.156,14.93,34.792,67.13], rect:[65.26,20.648,31.51,57.13], action:"next" } ],
+      prev:"page5", next:"page7" },
+    page7:{ enter:V+"page7.mp4", still:A+"page7.png", hd:A+"page7-hd.jpg", prev:"page6", next:"page8" },
+    page8:{ enter:V+"page8.mp4", still:A+"page8.png", hd:A+"page8-hd.jpg", prev:"page7" }
+  }
+};
+
+/* ============ Пароль (логика без изменений) ============ */
+const CONFIG = { need:1,
+  groups:[
+    { id:"stone", stems:["камуш","камеш","камн","камен","галь","голыш","kamush","kamen","kamn","stone","pebbl"],
+      words:["камушки","камушек","камушками","камешки","камешек","камень","камни","камней","камнями","галька","голыши"] },
+    { id:"wave", stems:["волн","прибо","volna","volny","wave"], words:["волна","волны","волне","волнах","волнами","волну","прибой"] },
+    { id:"lake", stems:["иссык","исык","иссик","исик","ысык","иссыкул","иссыккул","куль","issyk","issik","isyk","isik","озер"],
+      words:["иссык","исык","куль","иссыкуль","иссыккуль","иссыккуля","иссыкуля","озеро","озере","озера","ысык"] }
+  ],
+  wrong:["Почти. Загляни в подсказку.","Тёплее. Вспомни, где мы были.","Пока не то. Попробуй ещё раз.","Не совпало. Подсказка рядом."],
+  empty:"Напиши ответ, и дверь откроется."
+};
+const norm=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-яәөүңыіқғ0-9]+/gi," ").trim();
+function lev(a,b){if(a===b)return 0;if(!a.length)return b.length;if(!b.length)return a.length;let p=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[b.length]}
+const tol=n=>n<=4?0:n<=7?1:2;
+function detect(raw){const text=norm(raw),tokens=text?text.split(" "):[],joined=tokens.join("");return CONFIG.groups.map(g=>g.stems.some(s=>joined.includes(s))||tokens.some(t=>t.length>=4&&g.words.some(w=>lev(t,w)<=Math.min(tol(w.length),tol(t.length)))))}
+const $=id=>document.getElementById(id);
+const input=$("answer"),form=$("form"),msg=$("msg"),sparks=[...$("sparks").children];
+const pop=$("pop"),hintBtn=$("hintBtn"),stat=$("status"),gate=$("gate"),cardSec=$("card"),cardGate=$("cardGate");
+let wrongN=0,unlocked=false;
+
+/* ============ Фоновая загрузка всех файлов ============
+   Пока человек на стартовом экране и разгадывает пароль, все ролики и картинки скачиваются в память.
+   Потом они играют мгновенно, без подгрузки по ходу. Если открыть index.html как файл с диска
+   (file://), скачивать нечего, загрузка отключена. Если какой-то файл не скачался, сайт берёт его напрямую. */
+const blobs=new Map();
+const asset=src=>blobs.get(src)||src;
+const loader=(()=>{
+  const items=[],seen=new Set();
+  const on=location.protocol!=="file:"&&typeof fetch==="function"&&typeof URL!=="undefined"&&!!URL.createObjectURL;
+  const add=(src,w,ess)=>{if(!src||seen.has(src))return;seen.add(src);items.push({src,w,ess,f:0,done:false})};
+  Object.entries(DECK.scenes).forEach(([id,sc])=>{
+    const ess=id===DECK.start||id===(DECK.scenes[DECK.start]||{}).next;   // нужное для первых двух сцен
+    add(sc.still,1.5,ess);add(sc.enter,6,ess);add(sc.hd,1.5,false);
+    const it=sc.interactive;if(it){add(it.enter,6,ess);add(it.still,1.5,ess);add(it.exit,6,ess)}
+    (sc.hot||[]).forEach(h=>{add(h.alpha,.6,ess);add(h.mask,.6,ess)})});
+  const MIME={mp4:"video/mp4",webm:"video/webm",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp"};
+  const ext=src=>(src.split("?")[0].split(".").pop()||"").toLowerCase();
+  let ldEl=null,waiting=false,showUI=false,raf=0,ess0=false;
+  const frac=(list)=>{let t=0,g=0;list.forEach(it=>{t+=it.w;g+=it.w*(it.done?1:it.f)});return t?g/t:1};
+  const allDone=list=>list.every(it=>it.done);
+  const essList=items.filter(it=>it.ess);
+  function paint(){
+    raf=0;if(!ldEl)return;
+    const list=waiting?essList:items,p=Math.round(frac(list)*100);
+    $("ldB").style.width=p+"%";
+    $("ldT").textContent=(waiting?"Открытка собирается… ":"Открытка загружается · ")+p+"%";
+    ldEl.classList.toggle("wait",waiting);
+    ldEl.classList.toggle("done",allDone(items));
+    if(allDone(items)&&!waiting)setTimeout(()=>{if(allDone(items))ldEl.hidden=true},1200)}
+  const tick=()=>{if(!raf)raf=requestAnimationFrame(paint)};
+  async function pull(it){
+    for(let t=0;t<2;t++){
+      try{
+        const r=await fetch(it.src);if(!r.ok)throw new Error(r.status);
+        const len=+r.headers.get("content-length")||0,type=MIME[ext(it.src)]||r.headers.get("content-type")||"";
+        let blob;
+        if(r.body&&r.body.getReader){
+          const rd=r.body.getReader(),parts=[];let got=0;
+          for(;;){const x=await rd.read();if(x.done)break;parts.push(x.value);got+=x.value.length;if(len){it.f=Math.min(.99,got/len);tick()}}
+          blob=new Blob(parts,{type})}
+        else blob=new Blob([await r.arrayBuffer()],{type});
+        blobs.set(it.src,URL.createObjectURL(blob));it.done=true;it.f=1;tick();return
+      }catch(e){it.f=0}}
+    it.done=true;it.failed=true;tick()}      // не вышло — файл будет браться напрямую
+  let started=false,res=null;
+  const readyP=new Promise(r=>{res=r});
+  const check=()=>{if(allDone(essList))res()};
+  function start(){
+    if(started)return;started=true;
+    if(!on){items.forEach(it=>{it.done=true});res();return}
+    let k=0;const worker=async()=>{while(k<items.length){const it=items[k++];await pull(it);check()}};
+    check();for(let i=0;i<3;i++)worker()}
+  return{
+    start,items,
+    attach(el){ldEl=el;tick()},
+    show(v){showUI=v;if(ldEl){ldEl.hidden=!v||!on||allDone(items);tick()}},
+    wait(v){waiting=v;tick()},
+    /* ждать первые сцены, но не дольше maxMs: если сеть капризничает, открытка всё равно откроется */
+    whenReady(maxMs){return Promise.race([readyP,new Promise(r=>setTimeout(r,maxMs))])},
+    progress:()=>frac(items)}
+})();
+loader.attach($("ld"));
+loader.start();
+
+/* ============ Музыка: зацикленная, плавно нарастает, громкость настраивается ============ */
+/* Положи файлы в assets/audio/. Нет файла — сайт просто молчит, ничего не ломается.
+   vol — потолок громкости трека (0–1) при ползунке на максимуме; level — где ползунок стоит по умолчанию. */
+const MUSIC={
+  gate:{src:"assets/audio/gate.mp3",vol:.8,fadeIn:5000},   // экран пароля
+  card:{src:"assets/audio/card.mp3",vol:.8,fadeIn:6000},   // открытка
+  fadeOut:2500,                                            // затухание прежнего трека, мс
+  level:.6                                                 // ползунок по умолчанию (0–1)
+};
+const music=(()=>{
+  const KEY="abrikosenka.vol.v1",trk={};let cur=null,lvl=MUSIC.level,muted=false,sl=.7;
+  const clamp=v=>Math.max(0,Math.min(1,v));
+  try{const st=JSON.parse(localStorage.getItem(KEY)||"null");if(st){if(typeof st.l==="number")lvl=clamp(st.l);if(typeof st.s==="number")sl=clamp(st.s);muted=!!st.m}}catch(e){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({l:lvl,m:muted,s:sl}))}catch(e){}};
+  // ползунок работает по параболе: слух воспринимает громкость нелинейно, так тихие значения точнее
+  const master=()=>muted?0:lvl*lvl;
+  const apply=o=>{try{o.a.volume=clamp(o.g*MUSIC[o.k].vol*master())}catch(_){}};
+  function tr(k){
+    if(trk[k])return trk[k];
+    const a=new Audio();a.loop=true;a.preload="auto";a.volume=0;a.src=MUSIC[k].src;
+    const o=trk[k]={a,k,g:0,dead:false,blocked:false,raf:0};
+    a.addEventListener("error",()=>{o.dead=true});
+    return o}
+  // o.g — «внутренняя» громкость трека 0..1: нарастание по параболе (сначала совсем тихо), затухание зеркально
+  function ramp(o,to,ms,done){
+    cancelAnimationFrame(o.raf);
+    const from=o.g,t0=performance.now();
+    const step=now=>{
+      const p=ms<=0?1:Math.min(1,(now-t0)/ms);
+      o.g=to>=from?from+(to-from)*p*p:from+(to-from)*(1-(1-p)*(1-p));apply(o);
+      if(p<1)o.raf=requestAnimationFrame(step);else if(done)done()};
+    o.raf=requestAnimationFrame(step)}
+  function play(k){
+    const o=tr(k);if(o.dead)return;
+    o.g=0;apply(o);
+    let p;try{p=o.a.play()}catch(_){o.blocked=true;return}
+    const go=()=>{if(cur===k)ramp(o,1,MUSIC[k].fadeIn)};
+    if(p&&p.then)p.then(go).catch(()=>{o.blocked=true});else go()}
+  function to(k){
+    if(cur===k)return;
+    const prev=cur;cur=k;
+    if(prev&&trk[prev]){const o=trk[prev];ramp(o,0,MUSIC.fadeOut,()=>{if(cur!==prev)o.a.pause()})}
+    play(k)}
+  // браузеры не пускают звук до первого клика/нажатия — повторяем попытку при первом жесте
+  function unblock(){const o=cur&&trk[cur];if(o&&o.blocked&&!o.dead){o.blocked=false;play(cur)}}
+  ["pointerdown","keydown","touchend"].forEach(t=>document.addEventListener(t,unblock,true));
+  const all=()=>{Object.values(trk).forEach(apply);window.__sfxApply&&window.__sfxApply()};
+  return{
+    to,prep:tr,
+    get lvl(){return lvl},get muted(){return muted},get sl(){return sl},setSfx(x){sl=clamp(x);if(sl>0)muted=false;save();all()},
+    setLevel(x){lvl=clamp(x);if(lvl>0)muted=false;save();all()},
+    toggleMute(){muted=!muted;if(!muted&&lvl===0)lvl=MUSIC.level;save();all()}};
+})();
+music.prep("gate");
+/* ============ Звуки (SFX): assets/sfx/. Нет файла — просто тишина ============
+   n — сколько вариантов (файлы id1…idN.mp3), n:0 — один файл id.mp3; g — громкость; r — разброс скорости; t — пауза между запусками, мс */
+const SFX={
+  start_click:{n:4,g:.7,r:.03},key_type:{n:0,g:.35,r:.05,t:45},answer_wrong:{n:4,g:.6,r:.03},answer_right:{n:4,g:.6,r:.03},
+  ui_click:{n:2,g:.4,r:.03,t:120},pen_cross:{n:4,g:.5,r:.04},arrow:{n:3,g:.5,r:.04,t:150},
+  whoosh1:{n:0,g:.6,r:.03},whoosh2:{n:0,g:.6,r:.03},whoosh3:{n:0,g:.6,r:.03},whoosh4:{n:0,g:.6,r:.03},
+  lamp_tick:{n:0,g:.5,r:.06,t:30},lamp_on:{n:0,g:.8,r:.03},lamp_hum:{n:0,g:.15,r:0}};
+/* вуши внутри роликов: имя файла → [[секунда, звук]]; "a|b" — случайный из двух. Ролики pageX-1 без звуков. Правь здесь. */
+const W34="whoosh3|whoosh4";
+const CUES={"main1.mp4":[[0,W34]],"main1-reverse.mp4":[[0,W34]],"page1.mp4":[[0,W34]],"page2.mp4":[[1.4,"whoosh2"]],"page3.mp4":[[0,W34]],
+  "page4.mp4":[[8.4,"whoosh2"]],"page5.mp4":[[0,"whoosh1"]],"page6.mp4":[[5.8,"whoosh2"]],"page7.mp4":[[0,"whoosh1"]],"page8.mp4":[[1.4,"whoosh2"]]};
+const VIDEO_GAIN=.8;    // громкость собственного звука роликов относительно ползунка «Звуки»
+const sfx=(()=>{
+  const AC=window.AudioContext||window.webkitAudioContext,ok=!!AC&&location.protocol!=="file:";
+  const bufs={},bad={},bag={},last={},lt={},live=new Set(),cq=[];let ac=null,hum=null,lk=0,lastCue="";
+  const files=id=>{const c=SFX[id];return c.n?Array.from({length:c.n},(_,i)=>"assets/sfx/"+id+(i+1)+".mp3"):["assets/sfx/"+id+".mp3"]};
+  const level=()=>music.muted?0:music.sl*music.sl;
+  const ctx=()=>{if(!ok)return null;if(!ac)try{ac=new AC()}catch(e){return null}if(ac.state!=="running")ac.resume().catch(()=>{});return ac};
+  function load(s){
+    if(!ok||s in bufs)return;bufs[s]=null;
+    fetch(s).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()})
+      .then(ab=>{const c=ctx();if(!c)throw 0;return new Promise((res,rej)=>c.decodeAudioData(ab,res,rej))})
+      .then(b=>{const d=b.getChannelData(0);let i=0;while(i<d.length&&Math.abs(d[i])<.01)i++;bufs[s]={b,off:Math.max(0,i/b.sampleRate-.005)}})   // срезаем тишину в начале mp3
+      .catch(()=>{bad[s]=1})}
+  ["start_click","key_type","answer_wrong","answer_right","ui_click"].concat(Object.keys(SFX)).forEach(id=>files(id).forEach(load));
+  function play(id,o={}){
+    const c=SFX[id];if(!c)return null;const L=level();if(L<=0)return null;
+    const now=performance.now();if(c.t&&now-(lt[id]||0)<c.t)return null;
+    if(live.size>=10&&!o.force&&!/^(answer|lamp_on)/.test(id))return null;
+    let b=(bag[id]||[]).filter(s=>!bad[s]);
+    if(!b.length){b=files(id).filter(s=>!bad[s]).sort(()=>Math.random()-.5);if(b.length>1&&b[b.length-1]===last[id])b.unshift(b.pop())}   // «мешок»: без повторов подряд
+    if(!b.length)return null;
+    const s=b.pop();bag[id]=b;
+    const g=c.g*(o.gain||1)*L*Math.pow(10,(Math.random()*3-1.5)/20),rate=(o.rate||1)*(1+(Math.random()*2-1)*c.r);
+    let h;
+    if(ok){
+      const cx=ctx(),B=bufs[s];
+      if(!cx||!B||cx.state!=="running"){b.push(s);if(cx&&B&&o.retry&&!o._r)cx.resume().then(()=>play(id,{...o,_r:1})).catch(()=>{});return null}
+      const so=cx.createBufferSource(),gn=cx.createGain();so.buffer=B.b;so.playbackRate.value=rate;gn.gain.value=g;so.connect(gn);gn.connect(cx.destination);
+      if(o.loop){so.loop=true;gn.gain.value=0;gn.gain.linearRampToValueAtTime(g,cx.currentTime+.4)}
+      so.start(0,B.off);live.add(so);so.onended=()=>live.delete(so);
+      h={gn,stop(f=.12){try{const t=cx.currentTime;gn.gain.cancelScheduledValues(t);gn.gain.setValueAtTime(gn.gain.value,t);gn.gain.linearRampToValueAtTime(0,t+f);so.stop(t+f+.02)}catch(e){}}}
+    }else{   // файл с диска или нет WebAudio: обычный <audio>
+      const a=new Audio(s);a.volume=Math.min(1,g);a.playbackRate=rate;a.loop=!!o.loop;a.onerror=()=>{bad[s]=1};a.play().catch(()=>{});
+      h={a,stop(){try{a.pause()}catch(e){}}}}
+    last[id]=s;lt[id]=now;return h}
+  ["pointerdown","keydown"].forEach(t=>addEventListener(t,()=>ctx(),{capture:true,passive:true}));
+  window.__sfxApply=()=>{if(hum){const v=.15*level();try{if(hum.gn)hum.gn.gain.value=v;else hum.a.volume=Math.min(1,v)}catch(e){}}try{vidApply()}catch(e){}};
+  return{play,level,
+    hum(on){if(on){if(!hum&&level()>0)hum=play("lamp_hum",{loop:1,force:1})}else if(hum){hum.stop(.2);hum=null}},
+    cue(spec){const p=spec.split("|");let id=p[0];if(p.length>1)do{id=p[Math.floor(Math.random()*p.length)]}while(id===lastCue);lastCue=id;
+      const h=play(id,{force:1});if(h)cq.push(h)},
+    stopCues(){cq.splice(0).forEach(h=>h.stop(.12))},
+    demo(){const n=performance.now();if(n-lk>150){lk=n;play("ui_click")}}}
+})();        // начинает подгружаться заранее; играть станет после кнопки «Начать»
+if(input.maxLength<0)input.maxLength=40;    // упёрлись в лимит — браузер не шлёт input, звука нет
+{let pt=0,pl=input.value.length;input.addEventListener("input",e=>{
+  const n=input.value.length,t=e.inputType,now=performance.now();
+  if(t?!/^(delete|history)/.test(t):n>pl){sfx.play("key_type",{rate:e.data===" "?.85:1,gain:now-pt<120?.8:1});pt=now}pl=n})}
+function say(t,bad){stat.classList.toggle("show",!!t);if(t){msg.textContent=t;msg.classList.toggle("bad",!!bad)}}
+input.addEventListener("input",()=>{const n=detect(input.value).filter(Boolean).length;sparks.forEach((s,i)=>s.classList.toggle("on",i<n));if(msg.classList.contains("bad"))say("")});
+function placePop(){const w=$("hintWrap").getBoundingClientRect(),i=$("hintI").getBoundingClientRect();pop.style.left=(i.left+i.width/2-w.left)+"px"}
+addEventListener("resize",placePop);
+function setHint(o){if(o!==pop.classList.contains("open"))sfx.play("ui_click",{gain:.75});if(o)placePop();pop.classList.toggle("open",o);hintBtn.setAttribute("aria-expanded",o)}
+hintBtn.addEventListener("click",()=>setHint(!pop.classList.contains("open")));
+$("popX").addEventListener("click",()=>{setHint(false);hintBtn.focus({preventScroll:true})});
+document.addEventListener("pointerdown",e=>{if(pop.classList.contains("open")&&!pop.contains(e.target)&&!hintBtn.contains(e.target))setHint(false)});
+form.addEventListener("submit",e=>{e.preventDefault();if(unlocked)return;const v=input.value.trim();if(!v){say(CONFIG.empty,true);return}
+  if(detect(v).filter(Boolean).length>=CONFIG.need)success();else{sfx.play("answer_wrong");say(CONFIG.wrong[wrongN++%CONFIG.wrong.length],true);cardGate.classList.remove("shake");void cardGate.offsetWidth;cardGate.classList.add("shake")}});
+function success(){sfx.play("answer_right");unlocked=true;input.blur();setHint(false);say("Да. Именно так.",false);sparks.forEach(s=>s.classList.add("on"));
+  const t0=performance.now();
+  loader.wait(true);
+  /* ждём, пока скачаются первые сцены (если ещё нет), но не дольше 25 секунд */
+  loader.whenReady(25000).then(()=>{
+    loader.wait(false);
+    const d=Math.max(0,650-(performance.now()-t0));
+    setTimeout(()=>{music.to("card");gate.classList.add("leave")},d);
+    setTimeout(()=>openCard(false),d+1100)})}
+function openCard(instantIn){
+  unlocked=true;music.to("card");loader.show(false);gate.hidden=true;cardSec.hidden=false;layout();
+  void cardSec.offsetWidth;cardSec.classList.add("enter");
+  enterScene(DECK.start,{instant:true});
+  if(T.on)tuneOpen(true)}
+
+/* ============ Стартовый экран ============ */
+const intro=$("intro"),startBtn=$("startBtn"),boilG=[...document.querySelectorAll("[data-boil]")],volBox=$("vol"),volBtn=$("volBtn"),volRange=$("volRange"),volSfx=$("volSfx");
+let started=false,boilT=0;
+const reduced=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches);
+/* звёзды: немного, по всему экрану, мягкое мерцание с размытием и свечением */
+function makeStars(){
+  const box=$("stars"),n=Math.max(26,Math.min(64,Math.round(innerWidth*innerHeight/30000)));
+  const tint=["#fff4e6","#fff4e6","#fff4e6","#ffd9e8","#e4dcff","#ffe6c2"];
+  for(let i=0;i<n;i++){
+    const e=document.createElement("i"),big=Math.random()<.14,sz=big?4+Math.random()*4:1.2+Math.random()*2.2;
+    e.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;color:${tint[i%tint.length]};`
+      +`--g:${(big?10+Math.random()*10:3+Math.random()*6).toFixed(1)}px;--b:${(big?2+Math.random()*1.5:Math.random()*.9).toFixed(2)}px;`
+      +`--p:${(big?.3+Math.random()*.25:.35+Math.random()*.5).toFixed(2)};--d:${(4+Math.random()*6).toFixed(1)}s;--dl:-${(Math.random()*10).toFixed(1)}s`;
+    box.appendChild(e)}}
+makeStars();
+/* кадровая дрожь линий: 4 кадра в секунду, каждый раз новый рисунок шума */
+/* Меняем сам фильтр у элементов (а не seed внутри фильтра): так браузер гарантированно перерисовывает линии, даже когда мышь неподвижна */
+let boilK=0;
+function startBoil(){if(reduced||boilT)return;boilT=setInterval(()=>{let k;do{k=Math.floor(Math.random()*8)}while(k===boilK);boilK=k;boilG.forEach(g=>g.setAttribute("filter","url(#boil"+k+")"))},250)}
+function stopBoil(){clearInterval(boilT);boilT=0}
+startBoil();
+function begin(){
+  if(started)return;started=true;
+  music.prep("card");music.to("gate");
+  gate.hidden=false;volBox.hidden=false;loader.show(true);
+  intro.classList.add("out");
+  setTimeout(()=>{intro.hidden=true;stopBoil()},1500);
+  setTimeout(()=>{if(!unlocked)input.focus({preventScroll:true})},1100)}
+startBtn.addEventListener("click",()=>{sfx.play("start_click",{retry:1});begin()});
+setTimeout(()=>{if(!started)startBtn.focus({preventScroll:true})},1200);   // Enter или пробел тоже начинают
+
+/* ============ Громкость: тихий значок слева внизу ============ */
+function volUI(){
+  const v=Math.round(music.lvl*100);
+  volRange.value=v;volRange.style.setProperty("--p",v+"%");const w=Math.round(music.sl*100);volSfx.value=w;volSfx.style.setProperty("--p",w+"%");
+  volBox.classList.toggle("muted",music.muted||music.lvl===0)}
+volRange.addEventListener("input",()=>{music.setLevel(volRange.value/100);volUI()});
+volRange.addEventListener("change",()=>volRange.blur());    // чтобы стрелки ←/→ снова листали открытку
+volBtn.addEventListener("click",()=>{music.toggleMute();volUI();volBtn.blur();sfx.play("ui_click")});
+volSfx.addEventListener("input",()=>{music.setSfx(volSfx.value/100);volUI();sfx.demo()});
+volSfx.addEventListener("change",()=>volSfx.blur());
+volUI();
+
+/* ============ Защита интерфейса: без выделения, перетаскивания, паузы, зума ============ */
+const inField=t=>{const n=t&&(t.nodeType===1?t:t.parentElement);return !!(n&&n.closest&&n.closest("input,textarea,select"))};
+document.addEventListener("selectstart",e=>{if(!inField(e.target))e.preventDefault()});
+document.addEventListener("dragstart",e=>e.preventDefault());
+document.addEventListener("contextmenu",e=>{if(!inField(e.target))e.preventDefault()});
+document.addEventListener("dblclick",e=>{if(!inField(e.target))e.preventDefault()});
+/* Зум разрешён (щипок на трекпаде, Cmd +/−): фото можно рассматривать вблизи */
+try{if(navigator.mediaSession)["play","pause","stop","seekbackward","seekforward","seekto","previoustrack","nexttrack"].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,()=>{})}catch(e){}})}catch(e){}
+
+/* ============ Движок открытки ============ */
+const stage=$("stage"),hotEl=$("hot"),tlayer=$("tlayer"),tbox=$("tbox"),
+      navPrev=$("navPrev"),navNext=$("navNext"),returnBtn=$("returnBtn"),photoBtn=$("photoBtn"),photoEl=$("photo"),photoImg=$("photoImg");
+const S=DECK.scenes;
+Object.entries(S).forEach(([id,sc])=>{sc.id=id;sc.hot=(sc.hot||[]).map(h=>Object.assign({fit:null,maskFit:null},h))});
+
+let curStill=null,cur=null,inInteractive=false,busy=false,clipTok=0,clipActive=null,SW=1920,SH=1080,AR=16/9;
+const revealed=new Set();
+const pool={v:new Map(),i:new Map(),o:new Map()};
+const missing=new Set();
+const LY=[];            // слои текущей сцены (alpha/mask) — для подгонки
+const HOT=[];           // подсвеченные объекты текущей сцены — для кликов
+const flag=src=>{missing.add(src);tuneMiss()};
+const mk=(tag,cls)=>{const n=document.createElement(tag);if(cls)n.className=cls;return n};
+const place=(n,f)=>{n.style.left=f[0]+"%";n.style.top=f[1]+"%";n.style.width=f[2]+"%";n.style.height=f[3]+"%"};
+
+/* --- Кадр на весь экран. Пропорции берутся у настоящего PNG-кадра (AR), а не «на глаз 16:9».
+       cover — заполняет экран и подрезает края; contain — кадр целиком (клавиша V, вертикальный телефон) --- */
+function layout(){
+  const vw=cardSec.clientWidth||innerWidth,vh=cardSec.clientHeight||innerHeight;
+  let w,h;
+  if(T.whole||vw<vh){w=Math.min(vw,vh*AR);h=w/AR}else{w=Math.max(vw,vh*AR);h=w/AR}
+  SW=w;SH=h;
+  Object.assign(stage.style,{width:w+"px",height:h+"px",left:((vw-w)/2)+"px",top:((vh-h)/2)+"px"});
+  LY.forEach(placeLayer);
+  tuneSync()}
+function setAR(im){
+  if(!im.naturalWidth)return;
+  const r=im.naturalWidth/im.naturalHeight;
+  if(Math.abs(r-AR)>0.001){AR=r;layout()}}
+addEventListener("resize",layout);
+addEventListener("orientationchange",()=>setTimeout(layout,200));
+
+/* --- Пул медиа: всё, что рядом, уже загружено и лежит в DOM, поэтому чёрного экрана нет --- */
+/* если скачанная копия почему-то не заиграла, берём файл напрямую */
+function vidFallback(v,src){
+  if(v._fb||!/^blob:/.test(v.currentSrc||v.src))return false;
+  v._fb=1;blobs.delete(src);v.src=src;try{v.load()}catch(e){}return true}
+function vid(src){
+  let v=pool.v.get(src);if(v)return v;
+  v=mk("video","vid");
+  v.muted=true;v.defaultMuted=true;v.playsInline=true;v.preload="auto";v.controls=false;v.loop=false;
+  v.disablePictureInPicture=true;v.disableRemotePlayback=true;v.draggable=false;
+  ["playsinline","webkit-playsinline","muted"].forEach(a=>v.setAttribute(a,""));
+  v.setAttribute("controlslist","nodownload nofullscreen noremoteplayback");
+  v.addEventListener("pause",()=>{if(clipActive===v&&!v.ended&&!document.hidden)v.play().catch(()=>{})});
+  v.addEventListener("error",()=>{if(!vidFallback(v,src))flag(src)});
+  v.src=asset(src);stage.insertBefore(v,hotEl);pool.v.set(src,v);return v}
+function still(src){
+  let im=pool.i.get(src);if(im)return im;
+  im=mk("img","still");im.alt="";im.draggable=false;im.decoding="async";
+  im.onerror=()=>flag(src);im.src=asset(src);
+  if(im.decode)im.decode().catch(()=>{});
+  stage.insertBefore(im,hotEl);pool.i.set(src,im);return im}
+function warm(src){if(!src)return null;let im=pool.o.get(src);if(im)return im;im=new Image();im.decoding="async";im.onerror=()=>flag(src);im.src=asset(src);pool.o.set(src,im);return im}
+function prune(map,keep){
+  for(const [k,n] of [...map]){
+    if(keep.has(k)||n===clipActive||(n.classList&&(n.classList.contains("on")||n.classList.contains("under"))))continue;
+    if(n.tagName==="VIDEO"){n.removeAttribute("src");n.load()}
+    n.remove();map.delete(k)}}
+/* Предзагрузка: текущая сцена (кадр + интерактив), следующая и предыдущая */
+function preload(id){
+  const sc=S[id],keepV=new Set(),keepI=new Set();
+  const addV=s=>{if(s)keepV.add(s)},addI=s=>{if(s)keepI.add(s)};
+  addI(sc.still);
+  if(sc.interactive){addV(sc.interactive.enter);addI(sc.interactive.still);addV(sc.interactive.exit)}
+  const nx=sc.next&&S[sc.next],pv=sc.prev&&S[sc.prev];
+  if(nx){addV(nx.enter);addI(nx.still)}
+  if(pv){addI(pv.still);}
+  addV(sc.prevVideo);
+  [sc,nx,pv].forEach(s=>{if(s)s.hot.forEach(h=>{warm(h.alpha);warm(h.mask)})});
+  keepV.forEach(vid);keepI.forEach(still);
+  prune(pool.v,keepV);prune(pool.i,keepI)}
+
+/* --- Показ кадра: новый ложится поверх, старый убирается позже (без просвета) --- */
+function showStill(src,fade){
+  const im=still(src);curStill=src;
+  if(im.complete)setAR(im);else im.addEventListener("load",()=>{if(im.classList.contains("on"))setAR(im)},{once:true});
+  pool.i.forEach(o=>{if(o!==im&&o.classList.contains("on")){o.classList.remove("on");o.classList.add("under")}});
+  im.classList.remove("under");
+  im.style.transitionDuration=fade?".5s":"0s";
+  im.classList.add("on");
+  clearTimeout(showStill._t);
+  showStill._t=setTimeout(()=>pool.i.forEach(o=>{if(o!==im)o.classList.remove("under")}),fade?560:80)}
+
+/* --- Ролик ---
+   Пока ролик играет, под ним лежит прежний кадр. В конце нужный кадр ложится ПОВЕРХ ролика (класс lift),
+   и только потом ролик гаснет. Поэтому в любой момент виден либо ролик, либо точно такой же кадр,
+   ни прежнего кадра, ни чёрной вспышки не бывает. --- */
+let curClip=null;     // что делают → и ← во время ролика: {skip, undo}
+const CUE_FADE=.12;
+function fadeOut(v){v._fd=1;const v0=v.volume,t0=performance.now();const st=n=>{const k=Math.min(1,(n-t0)/120);try{v.volume=v0*(1-k)}catch(e){}if(k<1)requestAnimationFrame(st);else{try{v.pause()}catch(e){}v._fd=0}};requestAnimationFrame(st)}
+function vidApply(v){v=v||clipActive;if(!v)return;const L=sfx.level();try{v.defaultMuted=false;v.removeAttribute("muted");v.muted=L<=0;v.volume=Math.min(1,VIDEO_GAIN*L)}catch(e){}}
+function stopClips(){clipTok++;const pa=clipActive;clipActive=null;sfx.stopCues();curClip=null;stage.classList.remove("lift");pool.v.forEach(v=>{v.classList.remove("on");if(v===pa&&!v.paused&&!v.muted&&!v._fd)fadeOut(v);else if(!v._fd){try{v.pause()}catch(e){}}})}
+function playClip(src,cb,under,undo){
+  const my=++clipTok,v=vid(src);let done=false,wd;const cl=(CUES[src.split("/").pop()]||[]).slice().sort((a,b)=>a[0]-b[0]);let ci=0,cOn=0;
+  stage.classList.remove("lift");
+  clipActive=v;busy=true;
+  const hide=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(my!==clipTok)return;
+    stage.classList.remove("lift");
+    v.classList.remove("on");if(!v._fd)try{v.pause();v.currentTime=0}catch(e){}}));
+  const finish=()=>{
+    if(done||my!==clipTok)return;done=true;clearTimeout(wd);
+    v.onended=null;v.onerror=null;curClip=null;
+    stage.classList.add("lift");
+    cb();clipActive=null;
+    const im=under?still(under):null;
+    if(im&&im.decode)Promise.race([im.decode().catch(()=>{}),new Promise(r=>setTimeout(r,400))]).then(hide);else hide()};
+  const cueLoop=()=>{if(my!==clipTok||done)return;while(ci<cl.length&&v.currentTime>=cl[ci][0]){if(!(v.duration<cl[ci][0]))sfx.cue(cl[ci][1]);ci++}if(ci<cl.length)requestAnimationFrame(cueLoop)};
+  const reveal=()=>{if(my!==clipTok||done)return;clearTimeout(wd);v.classList.add("on");if(!cOn&&cl.length){cOn=1;cueLoop()}};
+  curClip={skip:()=>{if(!done&&my===clipTok){sfx.play("arrow");sfx.stopCues();fadeOut(v)}finish()},undo:()=>{if(my!==clipTok||done)return;sfx.play("arrow",{rate:.92});stopClips();if(undo)undo();else busy=false}};
+  v.onended=finish;v.onerror=()=>{if(vidFallback(v,src))return;flag(src);finish()};
+  wd=setTimeout(finish,12000);
+  const go=()=>{
+    if(my!==clipTok||done)return;
+    try{v.currentTime=0}catch(e){}
+    vidApply(v);const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;const q=v.play();if(q&&q.catch)q.catch(()=>finish())});
+    if("requestVideoFrameCallback" in v)v.requestVideoFrameCallback(reveal);else v.addEventListener("playing",reveal,{once:true})};
+  if(v.error){flag(src);finish();return}
+  if(v.readyState>=2)go();else v.addEventListener("loadeddata",go,{once:true})}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&clipActive&&clipActive.paused&&!clipActive.ended)clipActive.play().catch(()=>{})});
+
+/* --- Навигация --- */
+const hasInter=sc=>!!sc.interactive;
+const canNext=sc=>!!sc.next&&(sc.gateNext===false||!hasInter(sc)||revealed.has(sc.id));
+/* state: "normal" — обычная (80%), "ready" — яркая с покачиванием (только на кадрах pageX-1), "locked" — пока не открыт интерактив */
+function setPen(btn,show,state){
+  const was=!btn.hidden;btn.hidden=!show;
+  if(show&&!was){btn.classList.remove("draw");void btn.offsetWidth;btn.classList.add("draw")}
+  btn.classList.toggle("ready",state==="ready");btn.classList.toggle("locked",state==="locked")}
+/* на сцене нет ни объектов с действием, ни интерактива — единственный путь дальше стрелка, и она подсвечивается (page7) */
+const onlyArrow=sc=>!hasInter(sc)&&!sc.hot.some(h=>h.action);
+function renderNav(sc){setPen(navPrev,!!sc.prev,"normal");setPen(navNext,!!sc.next,canNext(sc)?(onlyArrow(sc)?"ready":"normal"):"locked")}
+function hideNav(){navPrev.hidden=true;navNext.hidden=true;photoBtn.hidden=true}
+const syncPhotoBtn=sc=>{
+  const show=!!(sc&&sc.hd&&!inInteractive&&!T.on&&!busy),was=!photoBtn.hidden;
+  photoBtn.hidden=!show;
+  if(show&&!was){photoBtn.classList.remove("draw");void photoBtn.offsetWidth;photoBtn.classList.add("draw")}};
+function clearHot(){hotEl.textContent="";LY.length=0;HOT.length=0;hotEl.style.cursor=""}
+function afterScene(sc){busy=false;renderNav(sc);renderHot(sc);syncPhotoBtn(sc)}
+
+/* вернуть состояние «до ролика» (клавиша ← во время ролика) */
+function restore(id,inter){
+  stopClips();cur=id;busy=false;const sc=S[id];
+  returnBtn.hidden=true;clearHot();hideNav();preload(id);
+  if(inter&&sc.interactive){inInteractive=true;showStill(sc.interactive.still);interactiveReady(sc)}
+  else{inInteractive=false;showStill(sc.still);afterScene(sc)}}
+function interactiveReady(sc){
+  revealed.add(sc.id);busy=false;syncPhotoBtn(sc);
+  if(sc.interactive.advance&&sc.next){setPen(navPrev,true,"normal");setPen(navNext,true,"ready")}else returnBtn.hidden=false}
+function enterScene(id,{instant=false}={}){
+  const from=cur,fromInter=inInteractive;
+  stopClips();cur=id;inInteractive=false;busy=false;const sc=S[id];
+  returnBtn.hidden=true;clearHot();hideNav();preload(id);
+  if(instant||!sc.enter){showStill(sc.still);afterScene(sc)}
+  else playClip(sc.enter,()=>{showStill(sc.still);afterScene(sc)},sc.still,from?()=>restore(from,fromInter):null)}
+function goNext(){
+  if(busy)return;const sc=S[cur];
+  if(inInteractive){if(sc.interactive.advance&&sc.next){sfx.play("arrow");enterScene(sc.next)}return}
+  if(!canNext(sc))return;sfx.play("arrow");enterScene(sc.next)}
+function goPrev(){
+  if(busy)return;
+  if(inInteractive){sfx.play("arrow",{rate:.92});closeInteractive();return}
+  const sc=S[cur];if(!sc.prev)return;sfx.play("arrow",{rate:.92});
+  const pid=sc.prev,ps=S[pid],fid=cur;
+  if(sc.prevVideo){stopClips();cur=pid;clearHot();hideNav();preload(pid);playClip(sc.prevVideo,()=>{showStill(ps.still);afterScene(ps)},ps.still,()=>restore(fid,false))}
+  else{stopClips();cur=pid;inInteractive=false;busy=false;clearHot();hideNav();preload(pid);showStill(ps.still,true);afterScene(ps)}}
+function openInteractive(sc){
+  if(busy||inInteractive||!sc||!sc.interactive)return;
+  inInteractive=true;clearHot();hideNav();
+  playClip(sc.interactive.enter,()=>{showStill(sc.interactive.still);interactiveReady(sc)},sc.interactive.still,()=>restore(sc.id,false))}
+function closeInteractive(){
+  if(busy||!inInteractive)return;const sc=S[cur];returnBtn.hidden=true;hideNav();
+  const after=()=>{inInteractive=false;showStill(sc.still,!sc.interactive.exit);afterScene(sc)};
+  if(sc.interactive.exit)playClip(sc.interactive.exit,after,sc.still,()=>restore(sc.id,true));else after()}
+function act(sc,h){
+  if(T.on||busy||inInteractive)return;const a=h.action;
+  if(a==="interactive")openInteractive(sc);else if(a==="next"){if(sc.next)enterScene(sc.next)}else if(a==="prev")goPrev();else if(a&&S[a])enterScene(a)}
+
+/* --- Слои подсветки: alpha (свечение) → mask (поверх). Клики считаются отдельно (hotAt) --- */
+const r3=n=>Math.round(n*1000)/1000;
+/* Размер по умолчанию: файл на весь кадр с сохранением СВОИХ пропорций (без растягивания) */
+function autoFitN(W,H){
+  if(!W||!H)return[0,0,100,100];
+  const r=W/H;if(Math.abs(r/AR-1)<0.02)return[0,0,100,100];
+  let w,h;if(r>AR){w=100;h=100*AR/r}else{h=100;w=100*r/AR}
+  return[r3((100-w)/2),r3((100-h)/2),r3(w),r3(h)]}
+const autoFit=l=>autoFitN(l.img.naturalWidth,l.img.naturalHeight);
+const fitOf=l=>l.kind==="alpha"?(l.h.fit||autoFit(l)):(l.h.maskFit||l.h.fit||autoFit(l));
+function placeLayer(l){place(l.img,fitOf(l))}
+function dropLayers(h){for(let k=LY.length;k--;)if(LY[k].h===h)LY.splice(k,1)}
+/* Попиксельная проверка по вырезу. null — браузер не даёт читать пиксели (например, страница открыта как файл) */
+function pixelHit(l,px,py){
+  const im=l.img;
+  if(l.px===undefined&&im.naturalWidth){
+    l.px=null;
+    try{const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;
+      const cx=c.getContext("2d",{willReadFrequently:true});cx.drawImage(im,0,0);l.px=cx.getImageData(0,0,c.width,c.height)}catch(e){l.px=null}}
+  if(!l.px)return null;
+  const f=fitOf(l),u=(px-f[0])/f[2],v=(py-f[1])/f[3];
+  if(u<0||u>1||v<0||v>1)return false;
+  const W=l.px.width,H=l.px.height,x=Math.min(W-1,Math.floor(u*W)),y=Math.min(H-1,Math.floor(v*H)),r=Math.max(1,Math.round(W/300)),d=l.px.data;
+  for(let dy=-r;dy<=r;dy+=r)for(let dx=-r;dx<=r;dx+=r){
+    const xx=Math.min(W-1,Math.max(0,x+dx)),yy=Math.min(H-1,Math.max(0,y+dy));
+    if(d[(yy*W+xx)*4+3]>20)return true}
+  return false}
+/* Какой объект под курсором (координаты в % кадра). При перекрытии побеждает самый точный/маленький, при равенстве — верхний */
+function hotAt(px,py){
+  let best=null,ba=1e9;
+  for(const g of HOT){
+    if(!g.h.action)continue;
+    let ok=false,area=1e6;
+    if(g.h.rect){const r=g.h.rect;ok=px>=r[0]&&px<=r[0]+r[2]&&py>=r[1]&&py<=r[1]+r[3];area=r[2]*r[3]}
+    else if(g.al){
+      const f=fitOf(g.al);
+      if(px>=f[0]&&px<=f[0]+f[2]&&py>=f[1]&&py<=f[1]+f[3]){const t=pixelHit(g.al,px,py);ok=t!==false;area=t===true?0:f[2]*f[3]}}
+    if(ok&&area<=ba){best=g;ba=area}}
+  return best}
+function renderHot(sc){
+  clearHot();if(inInteractive){tuneSync();return}
+  sc.hot.forEach((h,i)=>{
+    const g=mk("div","hotg");
+    const pulse=h.pulse!==undefined?h.pulse:true;
+    if(pulse)g.classList.add("pulse");
+    if(h.strong)g.classList.add("strong");
+    const entry={h,g,al:null};
+    let ai=null,mi=null;
+    const useBox=()=>{
+      if(ai){ai.remove();ai=null}if(mi){mi.remove();mi=null}dropLayers(h);entry.al=null;
+      if(!h.rect)return;
+      const b=mk("div","boxfx");place(b,h.rect);g.appendChild(b)};
+    if(h.alpha){
+      ai=mk("img","alpha");ai.alt="";ai.draggable=false;
+      ai.onerror=()=>{flag(h.alpha);useBox()};
+      const l={key:sc.id+":"+i+":alpha",kind:"alpha",h,img:ai,sid:sc.id,idx:i};
+      ai.addEventListener("load",()=>{placeLayer(l);tuneSync()});
+      ai.src=asset(h.alpha);g.appendChild(ai);LY.push(l);entry.al=l;placeLayer(l);
+      if(h.mask){
+        mi=mk("img","mask");mi.alt="";mi.draggable=false;
+        const m={key:sc.id+":"+i+":mask",kind:"mask",h,img:mi,sid:sc.id,idx:i};
+        mi.onerror=()=>{flag(h.mask);const x=mi;mi=null;if(x)x.remove();const k=LY.indexOf(m);if(k>=0)LY.splice(k,1);tuneSync()};
+        mi.addEventListener("load",()=>{placeLayer(m);tuneSync()});
+        mi.src=asset(h.mask);g.appendChild(mi);LY.push(m);placeLayer(m)}
+    }else useBox();
+    if(h.rect){const rv=mk("div","rv");place(rv,h.rect);g.appendChild(rv)}
+    HOT.push(entry);hotEl.appendChild(g)});
+  tuneSync()}
+hotEl.addEventListener("pointermove",e=>{
+  if(T.on||busy||inInteractive)return;
+  const p=stPt(e),g=hotAt(p.x,p.y);
+  HOT.forEach(x=>x.g.classList.toggle("hv",x===g));
+  hotEl.style.cursor=g?"pointer":""});
+hotEl.addEventListener("pointerleave",()=>{HOT.forEach(x=>x.g.classList.remove("hv"));hotEl.style.cursor=""});
+hotEl.addEventListener("click",e=>{
+  if(T.on||busy||inInteractive)return;
+  const p=stPt(e),g=hotAt(p.x,p.y);if(g)act(S[cur],g.h)});
+
+/* --- Кнопки на экране --- */
+[navPrev,navNext,returnBtn].forEach(b=>b.addEventListener("pointerdown",e=>e.preventDefault()));
+navNext.addEventListener("click",goNext);
+navPrev.addEventListener("click",goPrev);
+returnBtn.addEventListener("click",()=>{if(!busy&&inInteractive)sfx.play("ui_click");closeInteractive()});
+
+/* --- Страница в хорошем качестве (pageX-hd.jpg, квадрат 1280×1280) ---
+   Чёрный экран → через секунду «включается лампа»: ~0.7 с быстрого случайного мерцания (0–80% яркости,
+   с редкими перебивками до 100%), потом ровные 100%. Над картинкой летает пыль, зависящая от света. Выход: Esc или крестик. --- */
+let photoOn=false,lampRaf=0,dustRaf=0,lampT=0,photoTok=0;
+const litEl=$("lit"),hdbox=$("hdbox"),dustC=$("dust"),hdx=$("photoBack");
+const LAMP={delay:1000,flicker:700,maxDim:.8,breakChance:.22};
+function lampPlan(){
+  const seg=[];let t=0;
+  while(t<LAMP.flicker){
+    const len=22+Math.random()*68,r=Math.random();
+    seg.push([t,r<LAMP.breakChance?1:Math.pow(Math.random(),1.35)*LAMP.maxDim]);t+=len}
+  seg.push([LAMP.flicker,1]);return seg}
+function lampRun(tok){
+  const plan=lampPlan(),t0=performance.now();let li=-1,onD=0;
+  const step=now=>{
+    if(tok!==photoTok||!photoOn)return;
+    const t=now-t0-LAMP.delay;let lvl=0;
+    if(t>=LAMP.flicker){lvl=1;if(!onD){onD=1;sfx.play("lamp_on",{force:1});sfx.hum(true)}}
+    else if(t>=0){for(let i=plan.length-1;i>=0;i--)if(plan[i][0]<=t){lvl=plan[i][1];if(i!==li){li=i;sfx.play("lamp_tick",{gain:.2+.8*lvl})}break}}
+    litEl.style.opacity=lvl;
+    if(t>=LAMP.flicker*0.55&&!hdx._drawn){hdx._drawn=1;hdx.classList.remove("draw");void hdx.offsetWidth;hdx.classList.add("draw")}
+    if(lvl===1&&t>=LAMP.flicker){lampRaf=0;return}
+    lampRaf=requestAnimationFrame(step)};
+  lampRaf=requestAnimationFrame(step)}
+/* пыль: спрайт-«пылинка» + медленный дрейф; яркость каждой чуть мерцает */
+function dustRun(tok){
+  const ctx=dustC.getContext("2d");
+  const sp=document.createElement("canvas");sp.width=sp.height=48;
+  const sx=sp.getContext("2d");
+  if(!ctx||!sx)return;                       // нет canvas — просто без пыли
+  const gr=sx.createRadialGradient(24,24,0,24,24,24);
+  gr.addColorStop(0,"rgba(255,255,255,1)");gr.addColorStop(.25,"rgba(255,255,255,.65)");gr.addColorStop(1,"rgba(255,255,255,0)");
+  sx.fillStyle=gr;sx.fillRect(0,0,48,48);
+  let W=0,dpr=1;
+  const size=()=>{dpr=Math.min(2,window.devicePixelRatio||1);W=Math.max(2,Math.round(hdbox.clientWidth*dpr));dustC.width=dustC.height=W};
+  size();
+  const N=130,ps=Array.from({length:N},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.010,vy:-.002-Math.random()*.008,r:1.1+Math.random()*3,a:.5+Math.random()*.5,ph:Math.random()*6.28,sp:.6+Math.random()*1.6}));
+  let last=performance.now();
+  const step=now=>{
+    if(tok!==photoTok||!photoOn)return;
+    const dt=Math.min(.05,(now-last)/1000);last=now;
+    if(Math.abs(hdbox.clientWidth*dpr-W)>2)size();
+    ctx.clearRect(0,0,W,W);
+    for(const p of ps){
+      p.x+=(p.vx+Math.sin(now*.0004+p.ph)*.004)*dt*6;p.y+=(p.vy+Math.cos(now*.0003+p.ph)*.003)*dt*6;
+      if(p.x<-.05)p.x=1.05;else if(p.x>1.05)p.x=-.05;if(p.y<-.05)p.y=1.05;else if(p.y>1.05)p.y=-.05;
+      const tw=.55+.45*Math.sin(now*.001*p.sp+p.ph),d=p.r*dpr*3;
+      ctx.globalAlpha=p.a*tw;ctx.drawImage(sp,p.x*W-d/2,p.y*W-d/2,d,d)}
+    dustRaf=requestAnimationFrame(step)};
+  dustRaf=requestAnimationFrame(step)}
+function openPhoto(){
+  const sc=S[cur];
+  if(photoOn||busy||inInteractive||!sc||!sc.hd)return;
+  const tok=++photoTok;photoOn=true;
+  litEl.style.opacity=0;hdx.classList.remove("draw");hdx._drawn=0;
+  photoImg.onerror=()=>{if(!photoImg._fb){photoImg._fb=1;photoImg.src=asset(sc.still)}};   // hd-файла ещё нет — показываем обычный кадр
+  photoImg._fb=0;photoImg.src=asset(sc.hd);
+  photoEl.hidden=false;void photoEl.offsetWidth;photoEl.classList.add("in");
+  if(reduced){litEl.style.opacity=1;hdx.classList.add("draw");hdx._drawn=1;sfx.play("lamp_on",{force:1});sfx.hum(true)}else lampRun(tok);
+  dustRun(tok)}
+function closePhoto(){
+  if(!photoOn)return;photoOn=false;photoTok++;sfx.play("pen_cross");sfx.hum(false);
+  cancelAnimationFrame(lampRaf);cancelAnimationFrame(dustRaf);
+  photoEl.classList.remove("in");
+  setTimeout(()=>{if(!photoOn){photoEl.hidden=true;photoImg.removeAttribute("src");litEl.style.opacity=0}},380)}
+photoBtn.addEventListener("click",()=>{if(!photoOn)sfx.play("ui_click");openPhoto();photoBtn.blur()});
+hdx.addEventListener("click",closePhoto);
+[photoBtn,hdx].forEach(b=>b.addEventListener("pointerdown",e=>e.preventDefault()));
+
+/* --- Клавиатура (MacBook): ← → листают, ↓/Enter открывают интерактив, ↑/Esc возвращают, F — полный экран --- */
+function toggleFullscreen(){
+  const d=document,r=d.documentElement;
+  if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}
+  else{const f=r.requestFullscreen||r.webkitRequestFullscreen;if(f)f.call(r)}}
+addEventListener("keydown",e=>{
+  if(cardSec.hidden)return;
+  if(photoOn){
+    if(e.metaKey||e.ctrlKey||e.altKey)return;                       // Cmd +/−, скриншоты и т.п. работают
+    if(e.key==="Escape")closePhoto();
+    else if(/^[fа]$/i.test(e.key))toggleFullscreen();
+    e.preventDefault();return}
+  const typing=inField(e.target);
+  if((e.metaKey||e.ctrlKey)&&!typing&&/^[acxvs]$/i.test(e.key)&&!/^(c)$/i.test(e.key)){e.preventDefault();return}
+  if(typing||e.metaKey||e.ctrlKey||e.altKey)return;
+  const k=e.key;
+  if(k==="t"||k==="T"||k==="е"||k==="Е"){e.preventDefault();tuneOpen(!T.on);return}
+  if(k==="f"||k==="F"||k==="а"||k==="А"){e.preventDefault();toggleFullscreen();return}
+  if(k==="v"||k==="V"||k==="м"||k==="М"){e.preventDefault();toggleWhole();return}
+  if(k==="m"||k==="M"||k==="ь"||k==="Ь"){e.preventDefault();music.toggleMute();volUI();return}
+  if(T.on){
+    const step=(e.shiftKey?10:1)*0.05;
+    if(k==="ArrowLeft"||k==="ArrowRight"||k==="ArrowUp"||k==="ArrowDown"){e.preventDefault();tuneNudge(k==="ArrowRight"?step:k==="ArrowLeft"?-step:0,k==="ArrowDown"?step:k==="ArrowUp"?-step:0);return}
+    if(k==="+"||k==="="){e.preventDefault();tuneScale(step*2);return}
+    if(k==="-"||k==="_"){e.preventDefault();tuneScale(-step*2);return}
+    if(k==="l"||k==="L"||k==="д"||k==="Д"){e.preventDefault();tuneCycle();return}
+    if(k==="r"||k==="R"||k==="к"||k==="К"){e.preventDefault();tuneReset();return}
+  }
+  if(["ArrowRight","ArrowLeft","ArrowUp","ArrowDown","PageDown","PageUp"," ","Enter","Escape","Backspace"].includes(k))e.preventDefault();
+  if(e.repeat)return;
+  if(busy){    // во время ролика: → пропускает ролик (сразу кадр), ← возвращает то, что было до ролика
+    if(curClip){if(k==="ArrowRight"||k==="PageDown"||k===" ")curClip.skip();else if(k==="ArrowLeft"||k==="PageUp")curClip.undo()}
+    return}
+  const sc=S[cur];
+  if(k==="ArrowRight"||k==="PageDown"||k===" ")goNext();
+  else if(k==="ArrowLeft"||k==="PageUp"){inInteractive?closeInteractive():goPrev()}
+  else if(k==="ArrowUp"||k==="Escape"||k==="Backspace"){if(inInteractive)closeInteractive()}
+  else if(k==="ArrowDown"||k==="Enter"){if(!inInteractive&&hasInter(sc))openInteractive(sc)}});
+
+/* ============================================================
+   ИНСТРУМЕНТ ПОДГОНКИ (открывается по #tune или клавише T)
+   Заменяет прежнюю кнопку ⌖ «Координаты для hotspot»: в публичной
+   версии её нет — зрителю она не нужна.
+   ============================================================ */
+const T={on:/tune/.test(location.hash),key:null,lock:true,draw:false,whole:false,op:{}};
+const TK="abrikosenka.tune.v2";let tuned={};
+try{tuned=JSON.parse(localStorage.getItem(TK)||"{}")}catch(e){}
+const persist=()=>{try{localStorage.setItem(TK,JSON.stringify(tuned))}catch(e){}};
+if(T.on){Object.entries(tuned).forEach(([k,v])=>{const[sid,i,kind]=k.split(":"),h=S[sid]&&S[sid].hot[+i];if(!h)return;
+  if(kind==="alpha")h.fit=v;else if(kind==="mask")h.maskFit=v;else if(kind==="rect")h.rect=v})}
+const tp=$("tp"),tOut=$("tOut"),tSceneSel=$("tSceneSel"),tLayerSel=$("tLayerSel"),
+      tX=$("tX"),tY=$("tY"),tW=$("tW"),tH=$("tH"),tLock=$("tLock"),tOp=$("tOp");
+const selL=()=>LY.find(l=>l.key===T.key)||null;
+const nat=l=>[l.img.naturalWidth||16,l.img.naturalHeight||9];
+const ratioH=(l,w)=>w*(SW/SH)*(nat(l)[1]/nat(l)[0]);   // высота в % при заданной ширине в % и пропорциях файла
+tSceneSel.innerHTML=Object.keys(S).map(id=>`<option value="${id}">${id}</option>`).join("");
+
+function tuneOpen(on){
+  T.on=on;cardSec.classList.toggle("tune",on);document.body.classList.toggle("tunemode",on);tp.hidden=!on;
+  if(on){Object.values(S).forEach(sc=>sc.hot.forEach(h=>{warm(h.alpha);warm(h.mask)}))}
+  else{T.draw=false;tlayer.classList.remove("draw")}
+  if(cur){renderHot(S[cur])}
+}
+function tuneSync(){
+  if(!T.on)return;
+  const sc=S[cur];if(!sc)return;
+  tSceneSel.value=cur;
+  if(!selL()&&LY.length)T.key=LY[0].key;
+  if(!LY.length)T.key=null;
+  tLayerSel.innerHTML=LY.map(l=>`<option value="${l.key}">${l.idx} · ${l.kind} · ${(l.kind==="alpha"?l.h.alpha:l.h.mask).split("/").pop()}</option>`).join("")||"<option>— нет слоёв в этой сцене —</option>";
+  if(T.key)tLayerSel.value=T.key;
+  LY.forEach(l=>{l.img.style.opacity=((T.op[l.key]??65)/100)});
+  const l=selL();
+  if(l){
+    const f=fitOf(l);tX.value=r3(f[0]);tY.value=r3(f[1]);tW.value=r3(f[2]);tH.value=r3(f[3]);
+    tOp.value=T.op[l.key]??65;
+    place(tbox,f);tbox.classList.add("show")}
+  else tbox.classList.remove("show");
+  tOut.value=JSON.stringify(dumpScene(cur),null,1);
+  const st=pool.i.get(S[cur].still),nw=st&&st.naturalWidth;
+  $("tInfo").textContent="Кадр: "+(nw?nw+"×"+st.naturalHeight:"—")+" (AR "+r3(AR)+"), окно: "+innerWidth+"×"+innerHeight+", режим: "+(T.whole||innerWidth<innerHeight?"кадр целиком":"на весь экран");
+  tuneMiss()}
+function tuneMiss(){const n=$("tMiss");if(!n)return;n.className="hint"+(missing.size?" bad":"");n.textContent=missing.size?"Нет файла: "+[...missing].join(", "):""}
+function setFit(l,f){
+  f=f.map(r3);
+  if(l.kind==="alpha")l.h.fit=f;else l.h.maskFit=f;
+  tuned[l.key]=f;persist();
+  placeLayer(l);
+  if(l.kind==="alpha")LY.filter(x=>x.h===l.h&&x.kind==="mask"&&!x.h.maskFit).forEach(placeLayer);
+  tuneSync()}
+function tuneNudge(dx,dy){const l=selL();if(!l)return;const f=fitOf(l);setFit(l,[f[0]+dx,f[1]+dy,f[2],f[3]])}
+function tuneScale(dw){
+  const l=selL();if(!l)return;const f=fitOf(l);const nw=Math.max(.5,f[2]+dw);
+  const nh=T.lock?ratioH(l,nw):f[3]*nw/f[2];
+  setFit(l,[f[0]+(f[2]-nw)/2,f[1]+(f[3]-nh)/2,nw,nh])}
+function tuneCycle(){if(!LY.length)return;const i=LY.findIndex(l=>l.key===T.key);T.key=LY[(i+1)%LY.length].key;tuneSync()}
+function tuneReset(){
+  const l=selL();if(!l)return;
+  if(l.kind==="alpha")l.h.fit=null;else l.h.maskFit=null;
+  delete tuned[l.key];persist();
+  LY.filter(x=>x.h===l.h).forEach(placeLayer);tuneSync()}
+tSceneSel.addEventListener("change",()=>enterScene(tSceneSel.value,{instant:true}));
+tLayerSel.addEventListener("change",()=>{T.key=tLayerSel.value;tuneSync()});
+tOp.addEventListener("input",()=>{const l=selL();if(l){T.op[l.key]=+tOp.value;l.img.style.opacity=tOp.value/100}});
+tLock.addEventListener("change",()=>{T.lock=tLock.checked});
+function numChange(which){
+  const l=selL();if(!l)return;let[x,y,w,h]=[+tX.value,+tY.value,+tW.value,+tH.value];
+  if(T.lock){if(which==="w")h=ratioH(l,w);else if(which==="h")w=h/ratioH(l,1)}
+  setFit(l,[x,y,Math.max(.5,w),Math.max(.5,h)])}
+tX.addEventListener("change",()=>numChange("x"));tY.addEventListener("change",()=>numChange("y"));
+tW.addEventListener("change",()=>numChange("w"));tH.addEventListener("change",()=>numChange("h"));
+$("tReset").addEventListener("click",tuneReset);
+function toggleWhole(){T.whole=!T.whole;layout()}
+$("tWhole").addEventListener("click",toggleWhole);
+$("tpX").addEventListener("click",()=>tuneOpen(false));
+$("tpMin").addEventListener("click",()=>{const b=$("tpBody");b.hidden=!b.hidden});
+$("tRect").addEventListener("click",()=>{T.draw=!T.draw;tlayer.classList.toggle("draw",T.draw);$("tRect").style.boxShadow=T.draw?"0 0 10px rgba(255,217,163,.8)":"none"});
+$("tWipe").addEventListener("click",()=>{tuned={};persist();try{localStorage.removeItem(TK)}catch(e){}tOut.value="Сохранённое сброшено. Перезагрузи страницу — вернутся значения из DECK."});
+
+/* Перетаскивание и масштаб рамкой */
+let drag=null;
+const stPt=e=>{const r=stage.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100}};
+tbox.addEventListener("pointerdown",e=>{
+  const l=selL();if(!T.on||!l)return;e.preventDefault();e.stopPropagation();
+  tbox.setPointerCapture(e.pointerId);
+  drag={mode:e.target.dataset.h||"move",p0:stPt(e),f0:fitOf(l).slice(),l}});
+tbox.addEventListener("pointermove",e=>{
+  if(!drag)return;const p=stPt(e),{f0,l,mode}=drag;
+  if(mode==="move"){setFit(l,[f0[0]+p.x-drag.p0.x,f0[1]+p.y-drag.p0.y,f0[2],f0[3]]);return}
+  const ax=mode.includes("w")?f0[0]+f0[2]:f0[0], ay=mode.includes("n")?f0[1]+f0[3]:f0[1];
+  const nw=Math.max(.5,Math.abs(p.x-ax));
+  const nh=T.lock?ratioH(l,nw):Math.max(.5,Math.abs(p.y-ay));
+  setFit(l,[mode.includes("w")?ax-nw:ax,mode.includes("n")?ay-nh:ay,nw,nh])});
+["pointerup","pointercancel"].forEach(t=>tbox.addEventListener(t,()=>{drag=null}));
+
+/* Рамка rect (запасная обводка без alpha) */
+let rdrag=null,rsel=null;
+tlayer.addEventListener("pointerdown",e=>{
+  if(!T.on||!T.draw)return;e.preventDefault();tlayer.setPointerCapture(e.pointerId);
+  rdrag=stPt(e);rsel=mk("div","sel");tlayer.appendChild(rsel)});
+tlayer.addEventListener("pointermove",e=>{
+  if(!rdrag)return;const p=stPt(e);
+  Object.assign(rsel.style,{left:Math.min(rdrag.x,p.x)+"%",top:Math.min(rdrag.y,p.y)+"%",width:Math.abs(p.x-rdrag.x)+"%",height:Math.abs(p.y-rdrag.y)+"%"})});
+tlayer.addEventListener("pointerup",e=>{
+  if(!rdrag)return;const p=stPt(e),l=selL();
+  const r=[Math.min(rdrag.x,p.x),Math.min(rdrag.y,p.y),Math.abs(p.x-rdrag.x),Math.abs(p.y-rdrag.y)].map(r3);
+  rdrag=null;if(rsel){rsel.remove();rsel=null}
+  if(r[2]<1||r[3]<1||!l)return;
+  l.h.rect=r;tuned[l.sid+":"+l.idx+":rect"]=r;persist();renderHot(S[cur])});
+
+/* Данные для отладки */
+function layerInfo(sid,h,i,kind){
+  const src=kind==="alpha"?h.alpha:h.mask;if(!src)return null;
+  const im=pool.o.get(src),W=im&&im.naturalWidth,H=im&&im.naturalHeight;
+  const explicit=kind==="alpha"?h.fit:h.maskFit;
+  const f=explicit||(kind==="mask"&&h.fit)||autoFitN(W,H),sw=1080*AR;
+  return {layer:i+":"+kind,file:src,natural:W?[W,H]:null,fit:f.map(r3),
+    fitSource:explicit?"вручную":(kind==="mask"&&h.fit?"как у alpha":"авто (пропорции файла)"),
+    px:{x:r3(f[0]*sw/100),y:r3(f[1]*10.8),w:r3(f[2]*sw/100),h:r3(f[3]*10.8)}}}
+function dumpScene(sid){
+  const sc=S[sid],layers=[],sm=pool.i.get(sc.still);
+  sc.hot.forEach((h,i)=>{["alpha","mask"].forEach(k=>{const d=layerInfo(sid,h,i,k);if(d)layers.push(d)});
+    if(h.rect)layers.push({layer:i+":rect(зона клика)",rect:h.rect})});
+  return {scene:sid,layers,frame:{natural:sm&&sm.naturalWidth?[sm.naturalWidth,sm.naturalHeight]:null,AR:r3(AR)},
+    stage:{w:Math.round(SW),h:Math.round(SH),mode:(T.whole||innerWidth<innerHeight)?"contain":"cover"},viewport:{w:innerWidth,h:innerHeight,dpr:devicePixelRatio},
+    note:"fit=[x,y,w,h] в % от кадра; px — те же значения в пикселях кадра высотой 1080; maskFit не указан = маска следует за alpha"}}
+function dumpAll(){return {deck:Object.keys(S).map(dumpScene).filter(s=>s.layers.length)}}
+function copyText(t){
+  tOut.value=t;
+  const done=()=>{tOut.select()};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,()=>{tOut.select();document.execCommand("copy")});
+  else{tOut.select();try{document.execCommand("copy")}catch(e){}}}
+$("tCopyScene").addEventListener("click",()=>copyText(JSON.stringify(dumpScene(cur),null,1)));
+$("tCopyAll").addEventListener("click",()=>copyText(JSON.stringify(dumpAll(),null,1)));
+
+/* Вставка данных: принимает JSON из «Копировать сцену» и «Копировать всё» */
+const tIn=$("tIn");
+function tMsg(t,bad){const n=$("tMsg");n.className="hint"+(bad?" bad":"");n.textContent=t}
+function applyData(txt){
+  let data;try{data=JSON.parse(txt)}catch(e){tMsg("Не получилось разобрать текст: "+e.message,true);return}
+  const scenes=Array.isArray(data.deck)?data.deck:(data&&data.scene?[data]:null);
+  if(!scenes){tMsg("Не вижу данных сцены. Нужен текст из «Копировать сцену» или «Копировать всё».",true);return}
+  let n=0;const noScene=[];
+  scenes.forEach(sd=>{
+    const sc=S[sd.scene];if(!sc){noScene.push(sd.scene);return}
+    (sd.layers||[]).forEach(L=>{
+      const name=String(L.layer||""),idx=parseInt(name.split(":")[0],10);
+      if(/rect/.test(name)){
+        const h=sc.hot[idx];
+        if(h&&Array.isArray(L.rect)){h.rect=L.rect.map(Number);tuned[sd.scene+":"+idx+":rect"]=h.rect;n++}
+        return}
+      const kind=/mask/.test(name)?"mask":"alpha";
+      let i=sc.hot.findIndex(h=>(kind==="alpha"?h.alpha:h.mask)===L.file);if(i<0)i=idx;
+      const h=sc.hot[i];
+      if(!h||!Array.isArray(L.fit))return;
+      if(L.fitSource&&L.fitSource!=="вручную")return;      // авто-значения не трогаем
+      const f=L.fit.map(Number).map(r3);
+      if(kind==="alpha")h.fit=f;else h.maskFit=f;
+      tuned[sd.scene+":"+i+":"+kind]=f;n++})});
+  persist();if(cur)renderHot(S[cur]);
+  tMsg("Применено значений: "+n+(noScene.length?". Нет таких сцен: "+noScene.join(", "):""),n===0)}
+$("tApply").addEventListener("click",()=>applyData(tIn.value));
+tIn.addEventListener("paste",()=>setTimeout(()=>applyData(tIn.value),0));
+$("tPaste").addEventListener("click",async()=>{
+  try{const t=await navigator.clipboard.readText();tIn.value=t;applyData(t)}
+  catch(e){tMsg("Браузер не дал прочитать буфер. Кликни в поле выше, нажми Ctrl+V — данные применятся сами.",true)}});
+
+/* В режиме #tune старт и пароль пропускаются */
+if(T.on){started=true;intro.hidden=true;stopBoil();openCard()}
+</script>
+</body>
+</html>
