@@ -33,12 +33,12 @@ main{position:relative;z-index:2;min-height:100vh;min-height:100dvh;display:grid
 .leave{opacity:0;transform:scale(1.06);filter:blur(20px);pointer-events:none}
 
 /* ---------- Gate ---------- */
-.card{width:min(520px,100%);padding:clamp(1.5rem,7vw,2.5rem);display:flex;flex-direction:column;gap:var(--s6);background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:32px;-webkit-backdrop-filter:blur(26px) saturate(140%);backdrop-filter:blur(26px) saturate(140%);box-shadow:0 30px 80px rgba(6,2,20,.55),0 0 90px rgba(255,158,199,.13),inset 0 1px 0 rgba(255,255,255,.22);text-align:center;animation:rise 1.4s var(--ease) both}
+.card{position:relative;width:min(520px,100%);padding:clamp(1.5rem,7vw,2.5rem);display:flex;flex-direction:column;gap:var(--s6);background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:32px;-webkit-backdrop-filter:blur(26px) saturate(140%);backdrop-filter:blur(26px) saturate(140%);box-shadow:0 30px 80px rgba(6,2,20,.55),0 0 90px rgba(255,158,199,.13),inset 0 1px 0 rgba(255,255,255,.22);text-align:center;animation:rise 1.4s var(--ease) both}
 @keyframes rise{from{opacity:0;transform:translateY(24px) scale(.97);filter:blur(14px)}to{opacity:1;transform:none;filter:blur(0)}}
 .head{display:flex;flex-direction:column;align-items:center;gap:var(--s4)}
 .heart{width:32px;height:32px;color:var(--rose);filter:drop-shadow(0 0 12px var(--rose));animation:beat 3.2s ease-in-out infinite}
 @keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.16)}24%{transform:scale(1)}36%{transform:scale(1.1)}}
-h1{margin:0;font:italic 400 clamp(28px,6.6vw,42px)/1.16 "Cormorant Garamond",Georgia,serif;background:linear-gradient(100deg,#fff 0,var(--gold) 30%,var(--rose) 55%,#fff 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 9s linear infinite}
+h1,.gwt{margin:0;font:italic 400 clamp(28px,6.6vw,42px)/1.16 "Cormorant Garamond",Georgia,serif;background:linear-gradient(100deg,#fff 0,var(--gold) 30%,var(--rose) 55%,#fff 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 9s linear infinite}
 @keyframes shine{to{background-position:-250% 0}}
 form{display:flex;flex-direction:column;gap:var(--s4)}
 .field{position:relative}
@@ -200,15 +200,40 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .pbtn text{font:600 36px/1 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;fill:currentColor;stroke:currentColor;stroke-width:.9}
 
 /* ---------- Индикатор загрузки (экран пароля) ---------- */
-.ld{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.04em;color:var(--ink-soft);opacity:.5;white-space:nowrap;pointer-events:none;transition:opacity .9s var(--ease)}
+.ld{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:61;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.04em;color:var(--ink-soft);opacity:.5;white-space:nowrap;pointer-events:none;transition:opacity .9s var(--ease)}
 .ld .bar{width:124px;height:2px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden}
 .ld .bar i{display:block;height:100%;width:0;background:rgba(255,224,200,.72);transition:width .4s linear}
 .ld.wait{opacity:.95;font-size:13px}
+.ld.wait .bar{width:210px}
 .ld.done{opacity:0}
 .ld[hidden]{display:none}
 
+/* ---------- Ожидание загрузки: то же стекло, что и у пароля ---------- */
+.wt{position:relative;margin:0;padding:0 8vw;max-width:900px;text-align:center;font:600 clamp(30px,5vw,56px)/1.2 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;letter-spacing:.01em;color:#ffe9f2;text-shadow:0 0 6px rgba(var(--warm),.3),0 0 20px rgba(255,158,199,.2);transition:opacity .9s var(--ease)}
+.wt.off{opacity:0}
+/* окно «Жду готовность»: появляется, когда готов его звук; между ним и паролем — своё ожидание */
+#intro:not(.rdy) .ic{animation:none;opacity:0;pointer-events:none}
+.pt{transition:opacity .9s var(--ease)}
+#intro .wt,#intro .retry{position:absolute;left:50%;top:50%;width:min(92vw,900px);transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+#intro .wt{transition:opacity .9s var(--ease)}
+#intro .retry{width:auto;top:calc(50% + 74px);padding:var(--s3) var(--s5);font-size:14px;transition:opacity .9s var(--ease) .3s}
+#intro.waiting .pt,#intro.waiting .pbtn{opacity:0!important;pointer-events:none}
+#intro.waiting .wt{opacity:1;transition-delay:.5s}
+#intro.waiting .wt.off{opacity:0;transition-delay:0s}
+#intro.err .retry{opacity:1;pointer-events:auto}
+/* окно пароля: форма гаснет, в том же стекле появляется надпись */
+.card>.head,.card>form{transition:opacity .7s var(--ease),filter .7s var(--ease),transform .7s var(--ease)}
+.card.waiting>.head,.card.waiting>form{opacity:0;filter:blur(12px);transform:translateY(-8px) scale(.98);pointer-events:none}
+.gwait{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s5);padding:var(--s6);opacity:0;pointer-events:none;transition:opacity .9s var(--ease)}
+.card.waiting .gwait{opacity:1;transition-delay:.55s}
+.gwt{margin:0;font:italic 400 clamp(24px,5.4vw,34px)/1.2 "Cormorant Garamond",Georgia,serif;text-align:center;transition:opacity .9s var(--ease)}
+.gwt.off{opacity:0}
+.gretry{display:none;padding:var(--s3) var(--s5);font-size:14px}
+.card.err .gretry{display:inline-block;pointer-events:auto}
+.card.err .gwait{pointer-events:auto}
+
 /* ---------- Громкость музыки: тихий значок в углу, ползунок выезжает при наведении ---------- */
-.vol{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;min-height:34px;padding:0 4px;border-radius:999px;color:var(--ink-soft);opacity:.38;transition:opacity .6s var(--ease),background .6s var(--ease)}
+.vol{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:55;display:flex;align-items:center;min-height:34px;padding:0 4px;border-radius:18px;color:var(--ink-soft);opacity:.38;transition:opacity .6s var(--ease),background .6s var(--ease)}
 .vol:hover,.vol:focus-within{opacity:.9;background:rgba(14,10,28,.4)}
 .vol[hidden]{display:none}
 .vbtn{width:30px;height:30px;padding:0;display:grid;place-items:center;border:0;border-radius:50%;background:none;color:inherit;flex:none}
@@ -216,8 +241,12 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .vol.muted .w{display:none}
 .vol:not(.muted) .x{display:none}
 .vpanel{width:0;overflow:hidden;display:flex;flex-direction:column;transition:width .5s var(--ease)}
-.vol:hover .vpanel,.vol:focus-within .vpanel{width:100px}
-.vol input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:88px;height:18px;margin:0 6px;padding:0;background:none;border:0;border-radius:0;--p:60%;cursor:pointer;outline:none}
+.vol:hover .vpanel,.vol:focus-within .vpanel{width:178px}
+.vpanel{gap:5px}
+.vrow{display:block;padding:2px 0 0}
+.vrow b{display:block;margin:0 6px;font:600 15px/1 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;letter-spacing:.02em;color:rgba(255,232,214,.86)}
+.vrow i{display:block;margin:2px 6px 1px;font-style:normal;font-size:10px;line-height:1.25;letter-spacing:.03em;color:var(--ink-soft);opacity:.72;white-space:nowrap}
+.vol input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:166px;height:18px;margin:0 6px;padding:0;background:none;border:0;border-radius:0;--p:60%;cursor:pointer;outline:none}
 .vol input[type=range]::-webkit-slider-runnable-track{height:2px;border-radius:2px;background:linear-gradient(to right,rgba(255,232,214,.7) var(--p),rgba(255,255,255,.2) var(--p))}
 .vol input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;margin-top:-4px;border-radius:50%;background:#ffe8d6;border:0;box-shadow:none}
 .vol input[type=range]::-moz-range-track{height:2px;border-radius:2px;background:rgba(255,255,255,.2)}
@@ -255,6 +284,57 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .hdx.draw path{animation:ink .7s cubic-bezier(.45,.1,.3,1) both}
 .hdx.draw path:nth-child(2){animation-delay:.12s}
 .hdx.draw path:nth-child(3){animation-delay:.24s}
+/* ---------- Игра «Слова»: в том же стекле, пока докачивается открытка ---------- */
+.card.waiting .gwait{pointer-events:auto}
+.gheart{padding:12px;border:0;border-radius:50%;background:none;color:var(--rose);display:grid;place-items:center;cursor:pointer;transition:transform .5s var(--ease)}
+.gheart:hover,.gheart:focus-visible{transform:scale(1.14);outline:none}
+.gheart .heart{width:34px;height:34px}
+.card.err .gheart{pointer-events:none}
+.ghint{margin:calc(var(--s3)*-1) 0 0;font:600 21px/1.2 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;color:var(--ink-soft);opacity:0;pointer-events:none}
+.card.waiting .ghint{animation:hintIn 1.4s var(--ease) 6s both}
+.card.ready .ghint,.card.err .ghint{display:none}
+@keyframes hintIn{from{opacity:0}to{opacity:.85}}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.gopen{display:none;width:auto;padding:var(--s4) var(--s6)}
+.card.ready .gopen{display:inline-block;animation:up .9s var(--ease) both}
+.gm{position:fixed;inset:0;z-index:54;display:grid;place-items:center;padding:14px 10px 70px;background:rgba(6,3,16,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transition:opacity .6s var(--ease);
+  --t:min(52px,calc((100vw - 84px)/5),max(30px,calc((100dvh - 430px)/6)))}
+.gm.in{opacity:1}
+.gm[hidden]{display:none}
+.gcard{width:min(420px,100%);padding:12px 10px 14px;gap:8px;border-radius:26px;align-items:center;animation-duration:.9s}
+.gtop{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0 2px}
+.gtop i{width:84px}
+.gback{width:84px;white-space:nowrap;padding:6px 4px;border:0;border-radius:10px;background:none;color:var(--ink-soft);font:600 21px/1 "Caveat","Segoe Script","Bradley Hand",cursive;text-align:left}
+.gback:hover{color:var(--ink)}
+.gtitle{margin:0;font:600 30px/1 "Caveat","Segoe Script","Bradley Hand","Marker Felt",cursive;color:#ffe9f2;text-shadow:0 0 6px rgba(var(--warm),.3),0 0 20px rgba(255,158,199,.2)}
+.gopen2{display:block;width:100%;padding:12px 18px;animation:up .9s var(--ease) both}
+.gopen2[hidden]{display:none}
+.gmsg{margin:0;min-height:20px;font-size:13.5px;line-height:1.4;color:var(--ink-soft)}
+.gmsg.bad{color:#ffb8d2}
+.gboard{display:grid;gap:5px;justify-content:center}
+.grow{display:grid;grid-template-columns:repeat(5,var(--t));gap:5px}
+.gt{width:var(--t);height:var(--t);display:grid;place-items:center;border:1px solid var(--line);border-radius:calc(var(--t)*.22);background:rgba(14,10,28,.5);font:600 calc(var(--t)*.7)/1 "Caveat","Segoe Script","Bradley Hand",cursive;color:var(--ink);transition:border-color .2s,background .4s,color .4s}
+.gt.f{border-color:rgba(255,255,255,.5)}
+.gt.gpp{animation:gpop .14s ease-out}
+@keyframes gpop{50%{transform:scale(1.12)}}
+.gt.flip{animation:gflip .55s ease-in-out}
+@keyframes gflip{50%{transform:rotateX(90deg)}}
+.gt.ok,.gk.ok{background:linear-gradient(135deg,var(--gold),var(--rose));border-color:transparent;color:#2a0f26}
+.gt.pr,.gk.pr{background:rgba(183,164,255,.6);border-color:transparent}
+.gt.ab{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:var(--ink-soft)}
+.grow.win .gt{animation:ghop .6s var(--ease) both;animation-delay:calc(var(--i)*70ms)}
+@keyframes ghop{40%{transform:translateY(-8px)}}
+.gfoot{position:relative;width:100%;margin-top:4px}
+.gkeys{display:grid;gap:6px;transition:opacity .4s var(--ease)}
+.gkr{display:flex;gap:4px;justify-content:center}
+.gk{flex:1 1 0;min-width:0;height:40px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--glass);font:600 14px/1 "Manrope",sans-serif;color:var(--ink);text-transform:uppercase;touch-action:manipulation;transition:background .4s,color .4s,border-color .4s}
+.gk.wide{flex:1.5 1 0;font-size:12px}
+.gk:hover{background:rgba(255,255,255,.16)}
+.gk.ok:hover{background:linear-gradient(135deg,var(--gold),var(--rose))}
+.gk.ab{opacity:.32}
+.gnext{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:13px 26px;opacity:0;pointer-events:none;transition:opacity .5s var(--ease)}
+.gm.gend .gkeys{opacity:0;pointer-events:none}
+.gm.gend .gnext{opacity:1;pointer-events:auto}
 .tunemode .vol,.tunemode .tbtn{display:none}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
@@ -299,12 +379,21 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
         </g>
       </svg>
     </button>
+    <p class="wt boilh off" id="iwT" aria-live="polite"></p>
+    <button type="button" class="ghost retry" id="iRetry" tabindex="-1">Ещё раз</button>
   </div>
 </section>
 
 <main>
   <section id="gate" class="screen" aria-labelledby="q" hidden>
     <div class="card" id="cardGate">
+      <div class="gwait" id="gwait" aria-live="polite">
+        <button type="button" class="gheart" id="gHeart" tabindex="-1" aria-label="Сыграть в слова, пока ждёшь"><svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        <p class="gwt" id="gwT"></p>
+        <p class="ghint">нажми на сердечко, можно поиграть</p>
+        <button type="button" class="ghost gretry" id="gwRetry" tabindex="-1">Ещё раз</button>
+        <button type="button" class="go gopen" id="gwOpen" tabindex="-1">Открыть подарок</button>
+      </div>
       <div class="head">
         <svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
         <h1 id="q">Кем мы захотели стать, когда только начали общаться?</h1>
@@ -406,13 +495,26 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
   </div>
 </div>
 
+<div class="gm" id="game" hidden role="dialog" aria-label="Слова">
+  <div class="card gcard">
+    <div class="gtop"><button type="button" class="gback" id="gBack" tabindex="-1">‹ назад</button><h2 class="gtitle">Слова</h2><i aria-hidden="true"></i></div>
+    <button type="button" class="go gopen2" id="gOpen" tabindex="-1" hidden>Открыть подарок</button>
+    <p class="gmsg" id="gMsg" role="status" aria-live="polite"></p>
+    <div class="gboard" id="gBoard"></div>
+    <div class="gfoot"><div class="gkeys" id="gKeys"></div><button type="button" class="ghost gnext" id="gNext" tabindex="-1">Ещё слово</button></div>
+  </div>
+</div>
+
 <div class="ld" id="ld" hidden><span id="ldT"></span><div class="bar"><i id="ldB"></i></div></div>
 
 <div class="vol" id="vol" hidden>
   <button type="button" class="vbtn" id="volBtn" aria-label="Выключить или включить звук">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/><path class="w" d="M15.4 9.2a4.1 4.1 0 0 1 0 5.6M18 6.8a7.5 7.5 0 0 1 0 10.4"/><path class="x" d="M15.5 9.5l5 5M20.5 9.5l-5 5"/></svg>
   </button>
-  <div class="vpanel"><input type="range" id="volRange" min="0" max="100" value="60" aria-label="Громкость музыки" title="Музыка"><input type="range" id="volSfx" min="0" max="100" value="70" aria-label="Громкость звуков" title="Звуки"></div>
+  <div class="vpanel">
+    <div class="vrow"><b>Музыка</b><i>мелодия пароля и открытки</i><input type="range" id="volRange" min="0" max="100" value="60" aria-label="Громкость музыки: мелодия пароля и открытки" title="Музыка: мелодия пароля и открытки"></div>
+    <div class="vrow"><b>Звуки</b><i>бумага, клики, лампа, видео</i><input type="range" id="volSfx" min="0" max="100" value="70" aria-label="Громкость звуков: бумага, клики, лампа и звук в роликах" title="Звуки: бумага, клики, лампа и звук в роликах"></div>
+  </div>
 </div>
 
 
@@ -511,32 +613,54 @@ let wrongN=0,unlocked=false;
    Пока человек на стартовом экране и разгадывает пароль, все ролики и картинки скачиваются в память.
    Потом они играют мгновенно, без подгрузки по ходу. Если открыть index.html как файл с диска
    (file://), скачивать нечего, загрузка отключена. Если какой-то файл не скачался, сайт берёт его напрямую. */
+const AUDIO={gate:"assets/audio/gate.mp3",card:"assets/audio/card.mp3"};
+/* Ожидание загрузки. Каждое окно открывается, только когда скачаны ЕГО файлы (включая звуки):
+   «Жду готовность» → звук кнопки; пароль → gate.mp3, подсказка и звуки пароля; открытка → всё остальное.
+   full:true — перед открыткой ждать ВСЁ; false — только первые сцены.
+   stall — если загрузка стоит на месте столько мс, показывается ошибка с кнопкой «Ещё раз».
+   every — как часто меняется надпись, мс. Слово «открытка» в надписях не использовать.
+   Первая надпись всегда стоит первой, остальные идут вперемешку. */
+const WAIT={full:true,stall:30000,every:4800,phrases:[
+  "Доделываю тебе подарок","Задумался о тебе","Мечта о жизни с тобой","Придумываю новые идеи","Вижу сон с тобой",
+  "Расправляю складки на бумаге","Подбираю слова поточнее","Сочиняю тебе тишину","Зажигаю звёзды по одной","Прячу в углах маленькие сюрпризы",
+  "Пересчитываю всё, что хотел сказать","Достаю из памяти самое тёплое","Думаю, как тебя удивить","Складываю мысли в нужном порядке","Берегу этот момент для тебя",
+  "Рисую тебя в голове","Собираю по кусочкам хорошее настроение","Слушаю, как ты смеёшься (в мыслях)","Ищу, чем бы тебя порадовать","Завариваю вечер на двоих",
+  "Дописываю последнюю строчку","Ловлю тебя во снах","Откладываю всё, чтобы думать о тебе","Собираю смелость","Ещё пара штрихов, и всё"],
+  error:"Не получилось загрузить. Проверь интернет и попробуй ещё раз"};
+/* Игра «Слова» на экране ожидания: нажать на сердечко. Слова — ровно по 5 букв, ё считается за е. Правь список здесь. */
+const GAME={tries:6,words:["Закат","Покер","Озеро","Аллея","Фишка","Планы","Лилия","Букет","Цветы","Вишня","Какао","Сахар","Мечта","Милая","Ветер","Слова","Тепло",
+  "Сёмка","Машка","Давид","Секси","Жизнь","Смысл","Связь","Удача","Выбор","Роман","Вальс","Искра","Жених","Пульс","Огонь","Голос","Время","Тоска"]};
 const blobs=new Map();
 const asset=src=>blobs.get(src)||src;
 const loader=(()=>{
-  const items=[],seen=new Set();
+  const items=[],seen=new Set(),RANK={intro:0,gate:1,card:2};
   const on=location.protocol!=="file:"&&typeof fetch==="function"&&typeof URL!=="undefined"&&!!URL.createObjectURL;
-  const add=(src,w,ess)=>{if(!src||seen.has(src))return;seen.add(src);items.push({src,w,ess,f:0,done:false})};
+  const add=(src,w,ess,grp)=>{if(!src||seen.has(src))return;seen.add(src);items.push({src,w,ess,grp:grp||"card",f:0,done:false})};
+  add(AUDIO.gate,3,true,"gate");add("assets/image/hint.jpg",.8,true,"gate");add(AUDIO.card,3,true);   // сначала музыка пароля, потом остальное окно пароля, потом открытка
   Object.entries(DECK.scenes).forEach(([id,sc])=>{
     const ess=id===DECK.start||id===(DECK.scenes[DECK.start]||{}).next;   // нужное для первых двух сцен
     add(sc.still,1.5,ess);add(sc.enter,6,ess);add(sc.hd,1.5,false);
     const it=sc.interactive;if(it){add(it.enter,6,ess);add(it.still,1.5,ess);add(it.exit,6,ess)}
     (sc.hot||[]).forEach(h=>{add(h.alpha,.6,ess);add(h.mask,.6,ess)})});
-  const MIME={mp4:"video/mp4",webm:"video/webm",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp"};
+  const MIME={mp3:"audio/mpeg",mp4:"video/mp4",webm:"video/webm",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp"};
   const ext=src=>(src.split("?")[0].split(".").pop()||"").toLowerCase();
-  let ldEl=null,waiting=false,showUI=false,raf=0,ess0=false;
-  const frac=(list)=>{let t=0,g=0;list.forEach(it=>{t+=it.w;g+=it.w*(it.done?1:it.f)});return t?g/t:1};
+  let ldEl=null,waiting=false,raf=0,lastMove=performance.now();
+  const frac=list=>{let t=0,g=0;list.forEach(it=>{t+=it.w;g+=it.w*(it.done?1:it.f)});return t?g/t:1};
   const allDone=list=>list.every(it=>it.done);
-  const essList=items.filter(it=>it.ess);
+  const ess=()=>items.filter(it=>it.ess);
+  const gdone=g=>items.every(it=>RANK[it.grp]>RANK[g]||it.done);          // готовы все файлы окна g и всех окон до него
+  const ready=g=>g==="card"&&!WAIT.full?allDone(ess()):gdone(g);
   function paint(){
     raf=0;if(!ldEl)return;
-    const list=waiting?essList:items,p=Math.round(frac(list)*100);
+    const list=waiting&&!WAIT.full?ess():items,p=Math.round(frac(list)*100);
     $("ldB").style.width=p+"%";
-    $("ldT").textContent=(waiting?"Открытка собирается… ":"Открытка загружается · ")+p+"%";
+    $("ldT").textContent=(waiting?"Почти готово · ":"Загрузка · ")+p+"%";
     ldEl.classList.toggle("wait",waiting);
     ldEl.classList.toggle("done",allDone(items));
     if(allDone(items)&&!waiting)setTimeout(()=>{if(allDone(items))ldEl.hidden=true},1200)}
-  const tick=()=>{if(!raf)raf=requestAnimationFrame(paint)};
+  const tick=()=>{lastMove=performance.now();if(!raf)raf=requestAnimationFrame(paint)};
+  /* звуки, которые грузит sfx, тоже числятся за своим окном: reg возвращает функцию «скачано» */
+  const reg=(grp,w)=>{const it={src:"sfx#"+items.length,w:w||.3,ess:true,grp,f:0,done:!on};items.push(it);return()=>{if(it.done)return;it.done=true;it.f=1;tick()}};
   async function pull(it){
     for(let t=0;t<2;t++){
       try{
@@ -545,40 +669,51 @@ const loader=(()=>{
         let blob;
         if(r.body&&r.body.getReader){
           const rd=r.body.getReader(),parts=[];let got=0;
-          for(;;){const x=await rd.read();if(x.done)break;parts.push(x.value);got+=x.value.length;if(len){it.f=Math.min(.99,got/len);tick()}}
+          for(;;){const x=await rd.read();if(x.done)break;parts.push(x.value);got+=x.value.length;if(len)it.f=Math.min(.99,got/len);tick()}
           blob=new Blob(parts,{type})}
         else blob=new Blob([await r.arrayBuffer()],{type});
         blobs.set(it.src,URL.createObjectURL(blob));it.done=true;it.f=1;tick();return
       }catch(e){it.f=0}}
     it.done=true;it.failed=true;tick()}      // не вышло — файл будет браться напрямую
-  let started=false,res=null;
-  const readyP=new Promise(r=>{res=r});
-  const check=()=>{if(allDone(essList))res()};
+  let started=false,gateRes=null,gateD=false;
+  const gateP=new Promise(r=>{gateRes=r});
   function start(){
     if(started)return;started=true;
-    if(!on){items.forEach(it=>{it.done=true});res();return}
-    let k=0;const worker=async()=>{while(k<items.length){const it=items[k++];await pull(it);check()}};
-    check();for(let i=0;i<3;i++)worker()}
+    if(!on){items.forEach(it=>{it.done=true});gateD=true;gateRes();return}
+    const real=items.filter(it=>!it.src.startsWith("sfx#")),g=real.find(it=>it.src===AUDIO.gate);
+    const lane=async list=>{let k=0;await Promise.all([0,1,2].map(async()=>{while(k<list.length)await pull(list[k++])}))};
+    const gateRest=real.filter(it=>it!==g&&it.grp==="gate"),cardRest=real.filter(it=>it.grp==="card");
+    (async()=>{
+      await pull(g);gateD=true;gateRes();                     // сначала только gate.mp3 — вся скорость сети ему
+      await lane(gateRest);                                   // потом остальное окно пароля
+      await new Promise(r=>{const t0=performance.now(),t=setInterval(()=>{if(gdone("gate")||performance.now()-t0>8000){clearInterval(t);r()}},120)});   // и его звуки
+      lane(cardRest)})()}                                     // и только потом кадры, ролики и звуки открытки
   return{
-    start,items,
+    start,items,reg,ready,
     attach(el){ldEl=el;tick()},
-    show(v){showUI=v;if(ldEl){ldEl.hidden=!v||!on||allDone(items);tick()}},
+    show(v){if(ldEl){ldEl.hidden=!v||!on||allDone(items);tick()}},
     wait(v){waiting=v;tick()},
-    /* ждать первые сцены, но не дольше maxMs: если сеть капризничает, открытка всё равно откроется */
-    whenReady(maxMs){return Promise.race([readyP,new Promise(r=>setTimeout(r,maxMs))])},
+    /* ждать готовности окна g: true — готово, false — загрузка стоит на месте дольше ms */
+    until(g,ms){return new Promise(r=>{const t0=performance.now();if(ready(g))return r(true);
+      const t=setInterval(()=>{if(ready(g)){clearInterval(t);r(true)}else if(performance.now()-Math.max(lastMove,t0)>ms){clearInterval(t);r(false)}},300)})},
+    done:()=>allDone(items),gateDone:()=>gateD,
+    gateReady(ms){return Promise.race([gateP,new Promise(r=>setTimeout(r,ms))])},
     progress:()=>frac(items)}
 })();
 loader.attach($("ld"));
-loader.start();
+loader.show(true);       // полоса загрузки видна сразу, в том числе на экране «Жду готовность»; сама загрузка стартует после регистрации звуков (ниже)
 
 /* ============ Музыка: зацикленная, плавно нарастает, громкость настраивается ============ */
 /* Положи файлы в assets/audio/. Нет файла — сайт просто молчит, ничего не ломается.
    vol — потолок громкости трека (0–1) при ползунке на максимуме; level — где ползунок стоит по умолчанию. */
 const MUSIC={
-  gate:{src:"assets/audio/gate.mp3",vol:.8,fadeIn:5000},   // экран пароля
-  card:{src:"assets/audio/card.mp3",vol:.8,fadeIn:6000},   // открытка
+  gate:{src:AUDIO.gate,vol:.8,fadeIn:5000},   // экран пароля
+  card:{src:AUDIO.card,vol:.8,fadeIn:6000},   // открытка
   fadeOut:2500,                                            // затухание прежнего трека, мс
-  level:.6                                                 // ползунок по умолчанию (0–1)
+  level:.6,                                                 // ползунок по умолчанию (0–1)
+  /* HD-просмотр: музыка «уходит за стену» — срез высоких (ФНЧ, Гц), уровень (0–1), время входа и выхода, сек;
+     duck — насколько тише, если фильтр недоступен (файл с диска) */
+  wall:{freq:280,gain:.8,in:1.2,out:1,duck:.35}
 };
 const music=(()=>{
   const KEY="abrikosenka.vol.v1",trk={};let cur=null,lvl=MUSIC.level,muted=false,sl=.7;
@@ -587,12 +722,15 @@ const music=(()=>{
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({l:lvl,m:muted,s:sl}))}catch(e){}};
   // ползунок работает по параболе: слух воспринимает громкость нелинейно, так тихие значения точнее
   const master=()=>muted?0:lvl*lvl;
-  const apply=o=>{try{o.a.volume=clamp(o.g*MUSIC[o.k].vol*master())}catch(_){}};
+  let mc=null,wg=null,f1=null,f2=null,wk=1,wraf=0,walled=false;
+  const apply=o=>{try{const v=clamp(o.g*MUSIC[o.k].vol*master()*(o.gn?1:wk));if(o.gn)o.gn.gain.value=v;else o.a.volume=v}catch(_){}};
   function tr(k){
     if(trk[k])return trk[k];
-    const a=new Audio();a.loop=true;a.preload="auto";a.volume=0;a.src=MUSIC[k].src;
+    const a=new Audio();a.loop=true;a.preload="auto";a.volume=0;
     const o=trk[k]={a,k,g:0,dead:false,blocked:false,raf:0};
-    a.addEventListener("error",()=>{o.dead=true});
+    // скачанная копия не заиграла — один раз пробуем файл напрямую, потом молчим
+    a.addEventListener("error",()=>{if(o.s&&o.s!==MUSIC[k].src){o.s=MUSIC[k].src;a.src=o.s;a.play().catch(()=>{})}else o.dead=true});
+    if(mc)hook(o);
     return o}
   // o.g — «внутренняя» громкость трека 0..1: нарастание по параболе (сначала совсем тихо), затухание зеркально
   function ramp(o,to,ms,done){
@@ -606,6 +744,7 @@ const music=(()=>{
   function play(k){
     const o=tr(k);if(o.dead)return;
     o.g=0;apply(o);
+    const src=asset(MUSIC[k].src);if(o.s!==src){o.s=src;o.a.src=src}      // из памяти (скачано загрузчиком), иначе напрямую
     let p;try{p=o.a.play()}catch(_){o.blocked=true;return}
     const go=()=>{if(cur===k)ramp(o,1,MUSIC[k].fadeIn)};
     if(p&&p.then)p.then(go).catch(()=>{o.blocked=true});else go()}
@@ -617,9 +756,33 @@ const music=(()=>{
   // браузеры не пускают звук до первого клика/нажатия — повторяем попытку при первом жесте
   function unblock(){const o=cur&&trk[cur];if(o&&o.blocked&&!o.dead){o.blocked=false;play(cur)}}
   ["pointerdown","keydown","touchend"].forEach(t=>document.addEventListener(t,unblock,true));
+  /* «музыка за стеной»: в HD-просмотре музыка идёт через два фильтра нижних частот (слышны одни басы) и чуть тише.
+     Нужен WebAudio: с диска (file://) фильтра нет, там музыка просто приглушается. */
+  const AC=window.AudioContext||window.webkitAudioContext;
+  function hook(o){if(o.gn||!mc||mc.state!=="running")return;
+    try{const s=mc.createMediaElementSource(o.a),g=mc.createGain();s.connect(g);g.connect(wg);o.gn=g;o.a.volume=1;apply(o)}catch(e){}}
+  function route(){
+    if(!AC||location.protocol==="file:")return false;
+    try{
+      if(!mc){mc=new AC();wg=mc.createGain();f1=mc.createBiquadFilter();f2=mc.createBiquadFilter();
+        f1.type=f2.type="lowpass";f1.frequency.value=f2.frequency.value=20000;f1.Q.value=f2.Q.value=.5;
+        wg.connect(f1);f1.connect(f2);f2.connect(mc.destination)}
+      if(mc.state!=="running"){mc.resume().catch(()=>{});return false}
+      Object.values(trk).forEach(hook);return true
+    }catch(e){mc=null;return false}}
+  function wall(on){
+    if(walled===on)return;walled=on;cancelAnimationFrame(wraf);
+    const W=MUSIC.wall,ms=Math.max(50,(on?W.in:W.out)*1000),t0=performance.now(),viaF=route();
+    const fa=viaF?f1.frequency.value:0,ga=viaF?wg.gain.value:0,ka=wk,fT=on?W.freq:20000,gT=on?W.gain:1;
+    const step=now=>{const p=Math.min(1,(now-t0)/ms),e=p*p*(3-2*p);
+      if(viaF){f1.frequency.value=f2.frequency.value=fa*Math.pow(fT/fa,e);wg.gain.value=ga+(gT-ga)*e}   // частота меняется по логарифму — на слух ровно
+      else{wk=ka+((on?W.duck:1)-ka)*e;Object.values(trk).forEach(apply)}
+      if(p<1)wraf=requestAnimationFrame(step)};
+    wraf=requestAnimationFrame(step)}
+  ["pointerdown","keydown","touchend"].forEach(t=>document.addEventListener(t,()=>{if(mc&&mc.state!=="running")mc.resume().catch(()=>{})},true));
   const all=()=>{Object.values(trk).forEach(apply);window.__sfxApply&&window.__sfxApply()};
   return{
-    to,prep:tr,
+    to,prep(k){const o=tr(k);if(location.protocol==="file:"&&!o.s){o.s=MUSIC[k].src;o.a.src=o.s}return o},wall,
     get lvl(){return lvl},get muted(){return muted},get sl(){return sl},setSfx(x){sl=clamp(x);if(sl>0)muted=false;save();all()},
     setLevel(x){lvl=clamp(x);if(lvl>0)muted=false;save();all()},
     toggleMute(){muted=!muted;if(!muted&&lvl===0)lvl=MUSIC.level;save();all()}};
@@ -632,11 +795,11 @@ const SFX={
   ui_click:{n:2,g:.4,r:.03,t:120},pen_cross:{n:4,g:.5,r:.04},arrow:{n:3,g:.5,r:.04,t:150},
   whoosh1:{n:0,g:.6,r:.03},whoosh2:{n:0,g:.6,r:.03},whoosh3:{n:0,g:.6,r:.03},whoosh4:{n:0,g:.6,r:.03},
   lamp_tick:{n:0,g:.5,r:.06,t:30},lamp_on:{n:0,g:.8,r:.03},lamp_hum:{n:0,g:.15,r:0}};
-/* вуши внутри роликов: имя файла → [[секунда, звук]]; "a|b" — случайный из двух. Ролики pageX-1 без звуков. Правь здесь. */
+/* вуши внутри роликов: имя файла → [[секунда, звук, скорость]]; скорость необязательна (1 = как есть, .7 = медленнее и ниже); "a|b" — случайный из двух. Ролики pageX-1 без звуков. Правь здесь. */
 const W34="whoosh3|whoosh4";
 const CUES={"main1.mp4":[[0,W34]],"main1-reverse.mp4":[[0,W34]],"page1.mp4":[[0,W34]],"page2.mp4":[[1.4,"whoosh2"]],"page3.mp4":[[0,W34]],
-  "page4.mp4":[[8.4,"whoosh2"]],"page5.mp4":[[0,"whoosh1"]],"page6.mp4":[[5.8,"whoosh2"]],"page7.mp4":[[0,"whoosh1"]],"page8.mp4":[[1.4,"whoosh2"]]};
-const VIDEO_GAIN=.8;    // громкость собственного звука роликов относительно ползунка «Звуки»
+  "page4.mp4":[[8.4,"whoosh2"]],"page5.mp4":[[0,"whoosh1"]],"page6.mp4":[[5.8,"whoosh2",.7]],"page7.mp4":[[0,"whoosh1"]],"page8.mp4":[[1.4,"whoosh2"]]};
+const VIDEO_GAIN=1;     // громкость собственного звука роликов: 1 = ползунок «Звуки» как есть (выше 1 нельзя, браузер режет)
 const sfx=(()=>{
   const AC=window.AudioContext||window.webkitAudioContext,ok=!!AC&&location.protocol!=="file:";
   const bufs={},bad={},bag={},last={},lt={},live=new Set(),cq=[];let ac=null,hum=null,lk=0,lastCue="";
@@ -648,8 +811,14 @@ const sfx=(()=>{
     fetch(s).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()})
       .then(ab=>{const c=ctx();if(!c)throw 0;return new Promise((res,rej)=>c.decodeAudioData(ab,res,rej))})
       .then(b=>{const d=b.getChannelData(0);let i=0;while(i<d.length&&Math.abs(d[i])<.01)i++;bufs[s]={b,off:Math.max(0,i/b.sampleRate-.005)}})   // срезаем тишину в начале mp3
-      .catch(()=>{bad[s]=1})}
-  ["start_click","key_type","answer_wrong","answer_right","ui_click"].concat(Object.keys(SFX)).forEach(id=>files(id).forEach(load));
+      .catch(()=>{bad[s]=1}).then(()=>fin[s]&&fin[s]())}
+  const GATE_SFX=["key_type","answer_wrong","answer_right","ui_click"];                          // звуки окна пароля
+  const grpOf=id=>id==="start_click"?"intro":GATE_SFX.includes(id)?"gate":"card",fin={};
+  Object.keys(SFX).forEach(id=>files(id).forEach(f=>{fin[f]=loader.reg(grpOf(id))}));            // каждый звук числится за своим окном
+  if(!ok)Object.values(fin).forEach(f=>f());
+  files("start_click").forEach(load);                                  // кнопка «Начать» — сразу
+  loader.gateReady(8000).then(()=>GATE_SFX.forEach(id=>files(id).forEach(load)));                // звуки пароля — когда музыка пароля уже скачана
+  loader.until("gate",1e9).then(()=>Object.keys(SFX).forEach(id=>files(id).forEach(load)));      // остальные — когда готово всё окно пароля
   function play(id,o={}){
     const c=SFX[id];if(!c)return null;const L=level();if(L<=0)return null;
     const now=performance.now();if(c.t&&now-(lt[id]||0)<c.t)return null;
@@ -675,11 +844,12 @@ const sfx=(()=>{
   window.__sfxApply=()=>{if(hum){const v=.15*level();try{if(hum.gn)hum.gn.gain.value=v;else hum.a.volume=Math.min(1,v)}catch(e){}}try{vidApply()}catch(e){}};
   return{play,level,
     hum(on){if(on){if(!hum&&level()>0)hum=play("lamp_hum",{loop:1,force:1})}else if(hum){hum.stop(.2);hum=null}},
-    cue(spec){const p=spec.split("|");let id=p[0];if(p.length>1)do{id=p[Math.floor(Math.random()*p.length)]}while(id===lastCue);lastCue=id;
-      const h=play(id,{force:1});if(h)cq.push(h)},
+    cue(spec,rate){const p=spec.split("|");let id=p[0];if(p.length>1)do{id=p[Math.floor(Math.random()*p.length)]}while(id===lastCue);lastCue=id;
+      const h=play(id,{force:1,rate:rate||1});if(h)cq.push(h)},
     stopCues(){cq.splice(0).forEach(h=>h.stop(.12))},
     demo(){const n=performance.now();if(n-lk>150){lk=n;play("ui_click")}}}
 })();        // начинает подгружаться заранее; играть станет после кнопки «Начать»
+loader.start();
 if(input.maxLength<0)input.maxLength=40;    // упёрлись в лимит — браузер не шлёт input, звука нет
 {let pt=0,pl=input.value.length;input.addEventListener("input",e=>{
   const n=input.value.length,t=e.inputType,now=performance.now();
@@ -694,15 +864,118 @@ $("popX").addEventListener("click",()=>{setHint(false);hintBtn.focus({preventScr
 document.addEventListener("pointerdown",e=>{if(pop.classList.contains("open")&&!pop.contains(e.target)&&!hintBtn.contains(e.target))setHint(false)});
 form.addEventListener("submit",e=>{e.preventDefault();if(unlocked)return;const v=input.value.trim();if(!v){say(CONFIG.empty,true);return}
   if(detect(v).filter(Boolean).length>=CONFIG.need)success();else{sfx.play("answer_wrong");say(CONFIG.wrong[wrongN++%CONFIG.wrong.length],true);cardGate.classList.remove("shake");void cardGate.offsetWidth;cardGate.classList.add("shake")}});
+/* ============ Игра «Слова» (как Wordle): без словаря, можно вводить любые 5 букв ============ */
+const game=(()=>{
+  const el=$("game"),boardEl=$("gBoard"),keysEl=$("gKeys"),msgEl=$("gMsg"),openB=$("gOpen");
+  const N=5,TRIES=GAME.tries,norm=w=>w.toLowerCase().replace(/ё/g,"е"),RANK={ab:1,pr:2,ok:3};
+  const LAY=[["й","ц","у","к","е","н","г","ш","щ","з","х"],["ф","ы","в","а","п","р","о","л","д","ж","э"],["⌫","я","ч","с","м","и","т","ь","б","ю","ОК"]];
+  const CODE={KeyQ:"й",KeyW:"ц",KeyE:"у",KeyR:"к",KeyT:"е",KeyY:"н",KeyU:"г",KeyI:"ш",KeyO:"щ",KeyP:"з",BracketLeft:"х",KeyA:"ф",KeyS:"ы",KeyD:"в",KeyF:"а",KeyG:"п",KeyH:"р",KeyJ:"о",KeyK:"л",KeyL:"д",Semicolon:"ж",Quote:"э",KeyZ:"я",KeyX:"ч",KeyC:"с",KeyV:"м",KeyB:"и",KeyN:"т",KeyM:"ь",Comma:"б",Period:"ю",Backquote:"е"};
+  const rows=[],keyEl={};
+  for(let r=0;r<TRIES;r++){const row=document.createElement("div"),cells=[];row.className="grow";
+    for(let c=0;c<N;c++){const t=document.createElement("div");t.className="gt";t.style.setProperty("--i",c);row.appendChild(t);cells.push(t)}
+    boardEl.appendChild(row);rows.push({row,cells})}
+  LAY.forEach(line=>{const kr=document.createElement("div");kr.className="gkr";
+    line.forEach(k=>{const b=document.createElement("button"),sp=k==="⌫"||k==="ОК";b.type="button";b.tabIndex=-1;b.className="gk"+(sp?" wide":"");b.dataset.k=k;b.textContent=k;
+      if(sp)b.setAttribute("aria-label",k==="⌫"?"Стереть":"Ввод");keyEl[k]=b;kr.appendChild(b)});keysEl.appendChild(kr)});
+  let word="",answer="",row=0,letters=[],done=false,busy=false,isOpen=false,bag=[],lastW="";
+  const say=(t,bad)=>{msgEl.textContent=t||"";msgEl.classList.toggle("bad",!!bad)};
+  const shake=n=>{n.classList.remove("shake");void n.offsetWidth;n.classList.add("shake")};
+  function pickWord(){
+    if(!bag.length){bag=GAME.words.slice().sort(()=>Math.random()-.5);if(bag.length>1&&bag[bag.length-1]===lastW)bag.unshift(bag.pop())}
+    return lastW=bag.pop()}
+  function nextWord(){
+    word=pickWord();answer=norm(word);row=0;letters=[];done=false;busy=false;
+    rows.forEach(r=>{r.row.classList.remove("win","shake");r.cells.forEach(t=>{t.className="gt";t.textContent=""})});
+    Object.values(keyEl).forEach(b=>{b.className="gk"+(b.dataset.k==="⌫"||b.dataset.k==="ОК"?" wide":"")});
+    el.classList.remove("gend");say("")}
+  function type(l){
+    if(done||busy||letters.length>=N)return;
+    const t=rows[row].cells[letters.length];t.textContent=l.toUpperCase();t.classList.add("f","gpp");letters.push(l);say("");sfx.play("key_type")}
+  function back(){
+    if(done||busy||!letters.length)return;
+    const t=rows[row].cells[letters.length-1];t.textContent="";t.className="gt";letters.pop();say("")}
+  const score=(g,w)=>{const res=Array(N).fill("ab"),left={};
+    for(let i=0;i<N;i++){if(g[i]===w[i])res[i]="ok";else left[w[i]]=(left[w[i]]||0)+1}
+    for(let i=0;i<N;i++)if(res[i]!=="ok"&&left[g[i]]>0){res[i]="pr";left[g[i]]--}
+    return res};
+  function paintKey(l,st){const b=keyEl[l];if(!b)return;const cur=b.classList.contains("ok")?3:b.classList.contains("pr")?2:b.classList.contains("ab")?1:0;
+    if(RANK[st]>cur){b.classList.remove("ab","pr","ok");b.classList.add(st)}}
+  function submit(){
+    if(done||busy)return;
+    if(letters.length<N){say("Не хватает букв",true);shake(rows[row].row);return}
+    const g=letters.join(""),res=score(g,answer),R=rows[row],cr=row;busy=true;
+    R.cells.forEach((t,i)=>{setTimeout(()=>t.classList.add("flip"),i*240);setTimeout(()=>{t.classList.add(res[i]);paintKey(g[i],res[i])},i*240+270)});
+    setTimeout(()=>{busy=false;
+      if(g===answer){done=true;say("Да. Именно так.");R.row.classList.add("win");sfx.play("answer_right");el.classList.add("gend")}
+      else if(cr===TRIES-1){done=true;say("Это было «"+word.toUpperCase()+"»");sfx.play("answer_wrong");el.classList.add("gend")}
+    },N*240+420);
+    row++;letters=[]}
+  const press=k=>{if(k==="⌫")back();else if(k==="ОК")submit();else type(k)};
+  keysEl.addEventListener("mousedown",e=>e.preventDefault());
+  keysEl.addEventListener("click",e=>{const b=e.target.closest(".gk");if(b)press(b.dataset.k)});
+  $("gNext").addEventListener("click",()=>{sfx.play("ui_click");nextWord()});
+  const letterOf=e=>{const k=e.key;if(k&&k.length===1&&/[а-яё]/i.test(k))return norm(k);return CODE[e.code]||""};
+  document.addEventListener("keydown",e=>{
+    if(!isOpen||e.metaKey||e.ctrlKey||e.altKey)return;
+    const k=e.key;
+    if(k==="Escape"){e.preventDefault();e.stopPropagation();close();return}
+    if(k==="Enter"){e.preventDefault();e.stopPropagation();if(done)nextWord();else submit();return}
+    if(k==="Backspace"){e.preventDefault();e.stopPropagation();back();return}
+    const l=letterOf(e);if(l){e.preventDefault();e.stopPropagation();if(!e.repeat)type(l)}
+  },true);
+  function open(){
+    if(isOpen)return;isOpen=true;
+    if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+    if(!word)nextWord();
+    el.hidden=false;void el.offsetWidth;el.classList.add("in");sfx.play("ui_click")}
+  function close(){
+    if(!isOpen)return;isOpen=false;el.classList.remove("in");
+    setTimeout(()=>{if(!isOpen)el.hidden=true},700)}
+  $("gHeart").addEventListener("click",open);
+  $("gBack").addEventListener("click",()=>{sfx.play("ui_click");close()});
+  return{open,close,isOpen:()=>isOpen,ready(){openB.hidden=false}}})();
+
+/* ============ Пароль верный → ожидание → ручное «Открыть подарок» ============ */
+let entering=false;
+const enterCard=(d=0)=>{if(entering)return;entering=true;game.close();
+  setTimeout(()=>{music.to("card");gate.classList.add("leave")},d);
+  setTimeout(()=>openCard(false),d+1100)};
 function success(){sfx.play("answer_right");unlocked=true;input.blur();setHint(false);say("Да. Именно так.",false);sparks.forEach(s=>s.classList.add("on"));
   const t0=performance.now();
+  const go=()=>enterCard(Math.max(0,650-(performance.now()-t0)));
+  if(loader.ready("card")){go();return}                // всё уже скачано: переход как был, без экрана ожидания и без кнопки
   loader.wait(true);
-  /* ждём, пока скачаются первые сцены (если ещё нет), но не дольше 25 секунд */
-  loader.whenReady(25000).then(()=>{
-    loader.wait(false);
-    const d=Math.max(0,650-(performance.now()-t0));
-    setTimeout(()=>{music.to("card");gate.classList.add("leave")},d);
-    setTimeout(()=>openCard(false),d+1100)})}
+  let shown=false;
+  const st=setTimeout(()=>{shown=true;cardGate.classList.add("waiting");phraseCycle($("gwT"))},1100);   // успеют скачать за секунду — ожидание не нужно
+  loader.until("card",WAIT.stall).then(ok=>{
+    clearTimeout(st);loader.wait(false);
+    if(!ok){game.close();failUI("gate");return}
+    if(shown)readyUI();else go()})}
+/* скачано, а окно ожидания уже показано: ничего не открываем само, ждём нажатия */
+function readyUI(){
+  cycleStop();const e=$("gwT");e.classList.add("off");
+  setTimeout(()=>{e.textContent="Всё готово";e.classList.remove("off");cardGate.classList.add("ready");game.ready();
+    if(!game.isOpen())$("gwOpen").focus({preventScroll:true})},900)}
+$("gwOpen").addEventListener("click",()=>enterCard(0));
+$("gOpen").addEventListener("click",()=>enterCard(0));
+/* надписи ожидания: первая всегда первой, дальше вперемешку без повторов подряд */
+let cycleStop=()=>{};
+function phraseCycle(el){
+  cycleStop();
+  let bag=[],last="",n=0,tm=0,to=0;
+  const pick=()=>{if(n++===0)return last=WAIT.phrases[0];
+    if(!bag.length){bag=WAIT.phrases.slice().sort(()=>Math.random()-.5);if(bag.length>1&&bag[bag.length-1]===last)bag.unshift(bag.pop())}
+    return last=bag.pop()};
+  const swap=first=>{const t=pick();if(first){el.textContent=t;el.classList.remove("off");return}
+    el.classList.add("off");to=setTimeout(()=>{el.textContent=t;el.classList.remove("off")},900)};
+  swap(true);if(WAIT.phrases.length>1)tm=setInterval(()=>swap(false),WAIT.every);
+  cycleStop=()=>{clearInterval(tm);clearTimeout(to)}}
+/* загрузка стоит на месте дольше WAIT.stall: пишем ошибку вместо того, чтобы открывать как есть */
+function failUI(where){
+  cycleStop();loader.show(false);cardGate.classList.remove("ready");
+  const e=where==="intro"?$("iwT"):$("gwT");e.textContent=WAIT.error;e.classList.remove("off");
+  if(where==="intro")intro.classList.add("rdy","waiting","err");else cardGate.classList.add("waiting","err")}
+$("iRetry").addEventListener("click",()=>location.reload());$("gwRetry").addEventListener("click",()=>location.reload());
 function openCard(instantIn){
   unlocked=true;music.to("card");loader.show(false);gate.hidden=true;cardSec.hidden=false;layout();
   void cardSec.offsetWidth;cardSec.classList.add("enter");
@@ -710,12 +983,12 @@ function openCard(instantIn){
   if(T.on)tuneOpen(true)}
 
 /* ============ Стартовый экран ============ */
-const intro=$("intro"),startBtn=$("startBtn"),boilG=[...document.querySelectorAll("[data-boil]")],volBox=$("vol"),volBtn=$("volBtn"),volRange=$("volRange"),volSfx=$("volSfx");
+const intro=$("intro"),startBtn=$("startBtn"),boilG=[...document.querySelectorAll("[data-boil]")],boilH=[...document.querySelectorAll(".boilh")],volBox=$("vol"),volBtn=$("volBtn"),volRange=$("volRange"),volSfx=$("volSfx");
 let started=false,boilT=0;
 const reduced=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches);
 /* звёзды: немного, по всему экрану, мягкое мерцание с размытием и свечением */
-function makeStars(){
-  const box=$("stars"),n=Math.max(26,Math.min(64,Math.round(innerWidth*innerHeight/30000)));
+function makeStars(box){
+  const n=Math.max(26,Math.min(64,Math.round(innerWidth*innerHeight/30000)));
   const tint=["#fff4e6","#fff4e6","#fff4e6","#ffd9e8","#e4dcff","#ffe6c2"];
   for(let i=0;i<n;i++){
     const e=document.createElement("i"),big=Math.random()<.14,sz=big?4+Math.random()*4:1.2+Math.random()*2.2;
@@ -723,22 +996,29 @@ function makeStars(){
       +`--g:${(big?10+Math.random()*10:3+Math.random()*6).toFixed(1)}px;--b:${(big?2+Math.random()*1.5:Math.random()*.9).toFixed(2)}px;`
       +`--p:${(big?.3+Math.random()*.25:.35+Math.random()*.5).toFixed(2)};--d:${(4+Math.random()*6).toFixed(1)}s;--dl:-${(Math.random()*10).toFixed(1)}s`;
     box.appendChild(e)}}
-makeStars();
+makeStars($("stars"));
 /* кадровая дрожь линий: 4 кадра в секунду, каждый раз новый рисунок шума */
 /* Меняем сам фильтр у элементов (а не seed внутри фильтра): так браузер гарантированно перерисовывает линии, даже когда мышь неподвижна */
 let boilK=0;
-function startBoil(){if(reduced||boilT)return;boilT=setInterval(()=>{let k;do{k=Math.floor(Math.random()*8)}while(k===boilK);boilK=k;boilG.forEach(g=>g.setAttribute("filter","url(#boil"+k+")"))},250)}
+function startBoil(){if(reduced||boilT)return;boilT=setInterval(()=>{let k;do{k=Math.floor(Math.random()*8)}while(k===boilK);boilK=k;boilG.forEach(g=>g.setAttribute("filter","url(#boil"+k+")"));boilH.forEach(e=>{e.style.filter="url(#boil"+k+")"})},250)}
 function stopBoil(){clearInterval(boilT);boilT=0}
 startBoil();
-function begin(){
-  if(started)return;started=true;
-  music.prep("card");music.to("gate");
-  gate.hidden=false;volBox.hidden=false;loader.show(true);
-  intro.classList.add("out");
+function openGate(){
+  music.to("gate");gate.hidden=false;volBox.hidden=false;
+  intro.classList.remove("waiting");intro.classList.add("out");
   setTimeout(()=>{intro.hidden=true;stopBoil()},1500);
   setTimeout(()=>{if(!unlocked)input.focus({preventScroll:true})},1100)}
+function begin(){
+  if(started)return;started=true;
+  music.prep("card");
+  if(loader.ready("gate")){openGate();return}
+  intro.classList.add("waiting");phraseCycle($("iwT"));        // собственное ожидание между «Жду готовность» и паролем
+  loader.wait(true);
+  loader.until("gate",WAIT.stall).then(ok=>{loader.wait(false);if(ok){cycleStop();openGate()}else failUI("intro")})}
 startBtn.addEventListener("click",()=>{sfx.play("start_click",{retry:1});begin()});
-setTimeout(()=>{if(!started)startBtn.focus({preventScroll:true})},1200);   // Enter или пробел тоже начинают
+/* окно «Жду готовность» показывается, когда скачан его звук; стоит на месте дольше WAIT.stall — ошибка */
+loader.until("intro",WAIT.stall).then(ok=>{if(!ok){failUI("intro");return}intro.classList.add("rdy");setTimeout(()=>{if(!started)startBtn.focus({preventScroll:true})},1200)});
+setTimeout(()=>{if(!started&&intro.classList.contains("rdy"))startBtn.focus({preventScroll:true})},1200);   // Enter или пробел тоже начинают
 
 /* ============ Громкость: тихий значок слева внизу ============ */
 function volUI(){
@@ -852,8 +1132,8 @@ function showStill(src,fade){
    ни прежнего кадра, ни чёрной вспышки не бывает. --- */
 let curClip=null;     // что делают → и ← во время ролика: {skip, undo}
 const CUE_FADE=.12;
-function fadeOut(v){v._fd=1;const v0=v.volume,t0=performance.now();const st=n=>{const k=Math.min(1,(n-t0)/120);try{v.volume=v0*(1-k)}catch(e){}if(k<1)requestAnimationFrame(st);else{try{v.pause()}catch(e){}v._fd=0}};requestAnimationFrame(st)}
-function vidApply(v){v=v||clipActive;if(!v)return;const L=sfx.level();try{v.defaultMuted=false;v.removeAttribute("muted");v.muted=L<=0;v.volume=Math.min(1,VIDEO_GAIN*L)}catch(e){}}
+function fadeOut(v){const tk=v._fd=(v._fd||0)+1,v0=v.volume,t0=performance.now();const st=n=>{if(v._fd!==tk)return;const k=Math.min(1,(n-t0)/120);try{v.volume=v0*(1-k)}catch(e){}if(k<1)requestAnimationFrame(st);else{try{v.pause()}catch(e){}v._fd=0}};requestAnimationFrame(st)}
+function vidApply(v){v=v||clipActive;if(!v)return;const L=music.muted?0:music.sl;   /* ролики идут по ползунку «Звуки» напрямую */try{v.defaultMuted=false;v.removeAttribute("muted");v.muted=L<=0;v.volume=Math.min(1,VIDEO_GAIN*L)}catch(e){}}
 function stopClips(){clipTok++;const pa=clipActive;clipActive=null;sfx.stopCues();curClip=null;stage.classList.remove("lift");pool.v.forEach(v=>{v.classList.remove("on");if(v===pa&&!v.paused&&!v.muted&&!v._fd)fadeOut(v);else if(!v._fd){try{v.pause()}catch(e){}}})}
 function playClip(src,cb,under,undo){
   const my=++clipTok,v=vid(src);let done=false,wd;const cl=(CUES[src.split("/").pop()]||[]).slice().sort((a,b)=>a[0]-b[0]);let ci=0,cOn=0;
@@ -870,15 +1150,18 @@ function playClip(src,cb,under,undo){
     cb();clipActive=null;
     const im=under?still(under):null;
     if(im&&im.decode)Promise.race([im.decode().catch(()=>{}),new Promise(r=>setTimeout(r,400))]).then(hide);else hide()};
-  const cueLoop=()=>{if(my!==clipTok||done)return;while(ci<cl.length&&v.currentTime>=cl[ci][0]){if(!(v.duration<cl[ci][0]))sfx.cue(cl[ci][1]);ci++}if(ci<cl.length)requestAnimationFrame(cueLoop)};
-  const reveal=()=>{if(my!==clipTok||done)return;clearTimeout(wd);v.classList.add("on");if(!cOn&&cl.length){cOn=1;cueLoop()}};
+  const cueLoop=()=>{if(my!==clipTok||done)return;while(ci<cl.length&&v.currentTime>=cl[ci][0]){if(!(v.duration<cl[ci][0]))sfx.cue(cl[ci][1],cl[ci][2]);ci++}if(ci<cl.length)requestAnimationFrame(cueLoop)};
+  const reveal=()=>{if(my!==clipTok||done)return;clearTimeout(wd);v.classList.add("on");
+    setTimeout(()=>{if(my!==clipTok||done||v.paused||v.muted)return;if(v.webkitAudioDecodedByteCount===0||v.mozHasAudio===false||(v.audioTracks&&v.audioTracks.length===0))console.warn("[звук] в ролике "+src+" нет звуковой дорожки или браузер её не декодирует")},900);if(!cOn&&cl.length){cOn=1;cueLoop()}};
   curClip={skip:()=>{if(!done&&my===clipTok){sfx.play("arrow");sfx.stopCues();fadeOut(v)}finish()},undo:()=>{if(my!==clipTok||done)return;sfx.play("arrow",{rate:.92});stopClips();if(undo)undo();else busy=false}};
   v.onended=finish;v.onerror=()=>{if(vidFallback(v,src))return;flag(src);finish()};
   wd=setTimeout(finish,12000);
   const go=()=>{
     if(my!==clipTok||done)return;
     try{v.currentTime=0}catch(e){}
-    vidApply(v);const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;const q=v.play();if(q&&q.catch)q.catch(()=>finish())});
+    v._fd=0;vidApply(v);const p=v.play();
+    if(p&&p.catch)p.catch(()=>{v.muted=true;const q=v.play();if(q&&q.catch)q.catch(()=>finish());
+      ["pointerdown","keydown"].forEach(t=>addEventListener(t,()=>{if(clipActive===v)vidApply(v)},{once:true,capture:true}))});   // браузер не пустил звук — включим при первом нажатии
     if("requestVideoFrameCallback" in v)v.requestVideoFrameCallback(reveal);else v.addEventListener("playing",reveal,{once:true})};
   if(v.error){flag(src);finish();return}
   if(v.readyState>=2)go();else v.addEventListener("loadeddata",go,{once:true})}
@@ -1078,7 +1361,7 @@ function dustRun(tok){
 function openPhoto(){
   const sc=S[cur];
   if(photoOn||busy||inInteractive||!sc||!sc.hd)return;
-  const tok=++photoTok;photoOn=true;
+  const tok=++photoTok;photoOn=true;music.wall(true);
   litEl.style.opacity=0;hdx.classList.remove("draw");hdx._drawn=0;
   photoImg.onerror=()=>{if(!photoImg._fb){photoImg._fb=1;photoImg.src=asset(sc.still)}};   // hd-файла ещё нет — показываем обычный кадр
   photoImg._fb=0;photoImg.src=asset(sc.hd);
@@ -1086,7 +1369,7 @@ function openPhoto(){
   if(reduced){litEl.style.opacity=1;hdx.classList.add("draw");hdx._drawn=1;sfx.play("lamp_on",{force:1});sfx.hum(true)}else lampRun(tok);
   dustRun(tok)}
 function closePhoto(){
-  if(!photoOn)return;photoOn=false;photoTok++;sfx.play("pen_cross");sfx.hum(false);
+  if(!photoOn)return;photoOn=false;photoTok++;music.wall(false);sfx.play("pen_cross");sfx.hum(false);
   cancelAnimationFrame(lampRaf);cancelAnimationFrame(dustRaf);
   photoEl.classList.remove("in");
   setTimeout(()=>{if(!photoOn){photoEl.hidden=true;photoImg.removeAttribute("src");litEl.style.opacity=0}},380)}
