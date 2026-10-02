@@ -329,6 +329,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .gkr{display:flex;gap:4px;justify-content:center}
 .gk{flex:1 1 0;min-width:0;height:40px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--glass);font:600 14px/1 "Manrope",sans-serif;color:var(--ink);text-transform:uppercase;touch-action:manipulation;transition:background .4s,color .4s,border-color .4s}
 .gk.wide{flex:1.5 1 0;font-size:12px}
+.gk.hit{transform:scale(.9);filter:brightness(1.25)}
 .gk:hover{background:rgba(255,255,255,.16)}
 .gk.ok:hover{background:linear-gradient(135deg,var(--gold),var(--rose))}
 .gk.ab{opacity:.32}
@@ -715,6 +716,8 @@ const MUSIC={
      duck — насколько тише, если фильтр недоступен (файл с диска) */
   wall:{freq:280,gain:.8,in:1.2,out:1,duck:.35}
 };
+/* iPhone/iPad: по умолчанию звук сайта глушится переключателем «без звука»; так он играет как плеер */
+try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
 const music=(()=>{
   const KEY="abrikosenka.vol.v1",trk={};let cur=null,lvl=MUSIC.level,muted=false,sl=.7;
   const clamp=v=>Math.max(0,Math.min(1,v));
@@ -756,6 +759,13 @@ const music=(()=>{
   // браузеры не пускают звук до первого клика/нажатия — повторяем попытку при первом жесте
   function unblock(){const o=cur&&trk[cur];if(o&&o.blocked&&!o.dead){o.blocked=false;play(cur)}}
   ["pointerdown","keydown","touchend"].forEach(t=>document.addEventListener(t,unblock,true));
+  /* iOS даёт запускать звук только из самого нажатия. Пока «Начать» жмут, будим оба трека беззвучно:
+     потом они стартуют сами, даже если пароль открылся уже после ожидания загрузки */
+  function unlock(){["gate","card"].forEach(k=>{const o=tr(k);if(o.dead)return;
+    try{const src=asset(MUSIC[k].src);if(o.s!==src){o.s=src;o.a.src=src}
+      o.a.muted=true;const p=o.a.play();
+      const back=()=>{o.a.muted=false;if(cur!==k){try{o.a.pause()}catch(e){}}};
+      if(p&&p.then)p.then(back).catch(()=>{o.a.muted=false});else back()}catch(e){}})}
   /* «музыка за стеной»: в HD-просмотре музыка идёт через два фильтра нижних частот (слышны одни басы) и чуть тише.
      Нужен WebAudio: с диска (file://) фильтра нет, там музыка просто приглушается. */
   const AC=window.AudioContext||window.webkitAudioContext;
@@ -782,7 +792,7 @@ const music=(()=>{
   ["pointerdown","keydown","touchend"].forEach(t=>document.addEventListener(t,()=>{if(mc&&mc.state!=="running")mc.resume().catch(()=>{})},true));
   const all=()=>{Object.values(trk).forEach(apply);window.__sfxApply&&window.__sfxApply()};
   return{
-    to,prep(k){const o=tr(k);if(location.protocol==="file:"&&!o.s){o.s=MUSIC[k].src;o.a.src=o.s}return o},wall,
+    unlock,to,prep(k){const o=tr(k);if(location.protocol==="file:"&&!o.s){o.s=MUSIC[k].src;o.a.src=o.s}return o},wall,
     get lvl(){return lvl},get muted(){return muted},get sl(){return sl},setSfx(x){sl=clamp(x);if(sl>0)muted=false;save();all()},
     setLevel(x){lvl=clamp(x);if(lvl>0)muted=false;save();all()},
     toggleMute(){muted=!muted;if(!muted&&lvl===0)lvl=MUSIC.level;save();all()}};
@@ -914,14 +924,16 @@ const game=(()=>{
   keysEl.addEventListener("mousedown",e=>e.preventDefault());
   keysEl.addEventListener("click",e=>{const b=e.target.closest(".gk");if(b)press(b.dataset.k)});
   $("gNext").addEventListener("click",()=>{sfx.play("ui_click");nextWord()});
+  const flash=k=>{const b=keyEl[k];if(!b)return;b.classList.add("hit");setTimeout(()=>b.classList.remove("hit"),120)};
   const letterOf=e=>{const k=e.key;if(k&&k.length===1&&/[а-яё]/i.test(k))return norm(k);return CODE[e.code]||""};
-  document.addEventListener("keydown",e=>{
-    if(!isOpen||e.metaKey||e.ctrlKey||e.altKey)return;
+  window.addEventListener("keydown",e=>{
+    if(!isOpen||e.metaKey||e.ctrlKey||e.altKey||e.isComposing)return;
     const k=e.key;
     if(k==="Escape"){e.preventDefault();e.stopPropagation();close();return}
-    if(k==="Enter"){e.preventDefault();e.stopPropagation();if(done)nextWord();else submit();return}
-    if(k==="Backspace"){e.preventDefault();e.stopPropagation();back();return}
-    const l=letterOf(e);if(l){e.preventDefault();e.stopPropagation();if(!e.repeat)type(l)}
+    if(k==="Enter"||k==="NumpadEnter"){e.preventDefault();e.stopPropagation();if(!e.repeat){flash("ОК");if(done)nextWord();else submit()}return}
+    if(k==="Backspace"||k==="Delete"){e.preventDefault();e.stopPropagation();flash("⌫");back();return}
+    const l=letterOf(e);if(l){e.preventDefault();e.stopPropagation();if(!e.repeat){flash(l);type(l)}return}
+    if(k===" "||k==="Tab"||k.startsWith("Arrow"))e.preventDefault()   // пробел и стрелки не листают открытку под игрой
   },true);
   function open(){
     if(isOpen)return;isOpen=true;
@@ -1015,7 +1027,7 @@ function begin(){
   intro.classList.add("waiting");phraseCycle($("iwT"));        // собственное ожидание между «Жду готовность» и паролем
   loader.wait(true);
   loader.until("gate",WAIT.stall).then(ok=>{loader.wait(false);if(ok){cycleStop();openGate()}else failUI("intro")})}
-startBtn.addEventListener("click",()=>{sfx.play("start_click",{retry:1});begin()});
+startBtn.addEventListener("click",()=>{music.unlock();sfx.play("start_click",{retry:1});begin()});
 /* окно «Жду готовность» показывается, когда скачан его звук; стоит на месте дольше WAIT.stall — ошибка */
 loader.until("intro",WAIT.stall).then(ok=>{if(!ok){failUI("intro");return}intro.classList.add("rdy");setTimeout(()=>{if(!started)startBtn.focus({preventScroll:true})},1200)});
 setTimeout(()=>{if(!started&&intro.classList.contains("rdy"))startBtn.focus({preventScroll:true})},1200);   // Enter или пробел тоже начинают
