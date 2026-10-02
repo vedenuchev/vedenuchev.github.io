@@ -4,6 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Для тебя</title>
+<meta name="theme-color" content="#0e0a1c">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Тебе одной 🤍">
+<meta property="og:description" content="Здесь кое-что ждёт. Нужен только код…">
+<meta property="og:image" content="https://vedenuchev.github.io/banner.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://vedenuchev.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&family=Manrope:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -630,7 +642,11 @@ const WAIT={full:true,stall:30000,every:4800,phrases:[
   error:"Не получилось загрузить. Проверь интернет и попробуй ещё раз"};
 /* Игра «Слова» на экране ожидания: нажать на сердечко. Слова — ровно по 5 букв, ё считается за е. Правь список здесь. */
 const GAME={tries:6,words:["Закат","Покер","Озеро","Аллея","Фишка","Планы","Лилия","Букет","Цветы","Вишня","Какао","Сахар","Мечта","Милая","Ветер","Слова","Тепло",
-  "Сёмка","Машка","Давид","Секси","Жизнь","Смысл","Связь","Удача","Выбор","Роман","Вальс","Искра","Жених","Пульс","Огонь","Голос","Время","Тоска"]};
+  "Сёмка","Машка","Давид","Секси","Жизнь","Смысл","Связь","Удача","Выбор","Роман","Вальс","Искра","Жених","Пульс","Огонь","Голос","Время","Тоска",
+  "Киска","Писка","Соска","Сучка","Сиска","Виски","Водка","Китай","Рашка","Питер",
+  "Чэнду","Тараз","Домик","Жесть","Экшен","Жопка","Попка","Глаза","Пенис","Нежно",
+  "Важно","Абьюз","Рядом","Звони","Здесь","Умная","Сочно","Ломка","Тяжко","Мочка",
+  "Котик","Сосок","Ножка","Ручка","Пивко"]};
 const blobs=new Map();
 const asset=src=>blobs.get(src)||src;
 const loader=(()=>{
